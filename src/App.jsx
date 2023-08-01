@@ -1,6 +1,10 @@
 import React from "react";
+import { useData } from "./hooks";
 
-const App = props => {
+const App = () => {
+
+  const data = useData();
+
   return (
     <div>
       Linear
