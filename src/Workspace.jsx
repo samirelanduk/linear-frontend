@@ -6,7 +6,13 @@ const Workspace = props => {
 
   const { name, issues } = props;
 
-  const teams = issues.reduce((acc, issue) => {
+  const sortedByTeam = [...issues].sort((a, b) => {
+    if (a.team.order < b.team.order) return -1;
+    if (a.team.order > b.team.order) return 1;
+    return 0;
+  });
+
+  const teams = sortedByTeam.reduce((acc, issue) => {
     const team = issue.team.name;
     if (!acc[team]) acc[team] = [];
     acc[team].push(issue);
