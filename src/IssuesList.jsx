@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Issue from "./Issue";
 
 const IssuesList = props => {
 
@@ -24,9 +25,7 @@ const IssuesList = props => {
   return (
     <div className="flex flex-col">
       {orderedIssues.map(issue => (
-        <div key={issue.id} className="flex flex-col">
-          <div className={`text-base ${issue.parent ? "ml-10" : ""}`}>{issue.title}</div>
-        </div>
+        <Issue key={issue.id} issue={issue} />
       ))}
     </div>
   );
