@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import IssuesList from "./IssuesList";
+import Team from "./Team";
 
 const Workspace = props => {
 
@@ -12,17 +13,13 @@ const Workspace = props => {
     acc[team].push(issue);
     return acc;
   }, {});
-  console.log(teams);
 
   return (
     <div>
       <div className="text-3xl">{name}</div>
       <div className="flex flex-col">
         {Object.entries(teams).map(([name, issues]) => (
-          <div key={name} className="flex flex-col">
-            <div className="text-2xl">{name}</div>
-            <IssuesList issues={issues} />
-          </div>
+          <Team key={name} name={name} issues={issues} />
         ))}
       </div>
     </div>
