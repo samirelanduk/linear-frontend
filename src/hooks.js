@@ -2,7 +2,17 @@ import { useState, useEffect } from "react";
 import TOKENS from "./tokens";
 
 const QUERY = `{
-  issues(first: 250 filter: {assignee: {isMe: {eq: true}}}) {
+  issues(
+    first: 250
+    filter: {
+      state: { name: { neq: "Done" } }
+      or: [
+        { assignee: { isMe: { eq: true } } }
+        { parent: { assignee: { isMe: { eq: true } } } }
+        
+      ]
+    }
+  ) {
     nodes {
       id
       title
