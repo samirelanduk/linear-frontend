@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Issue from "./Issue";
 
 const IssuesList = props => {
 
   const { issues } = props;
+
+  const [expanded, setExpanded] = useState([]);
 
   const statusOrders = {
     "Held": 1,
@@ -30,7 +32,7 @@ const IssuesList = props => {
   for (let issue of sortedIssues) {
     if (issue.parent) continue
     orderedIssues.push(issue);
-    if (Object.values(mapping).includes(issue.id)) {
+    if (expanded.includes(issue.id) && Object.values(mapping).includes(issue.id)) {
       const children = issues.filter(e => e.parent && e.parent.id === issue.id);
       orderedIssues.push(...children);
     }
@@ -39,7 +41,14 @@ const IssuesList = props => {
   return (
     <div className="flex flex-col">
       {orderedIssues.map(issue => (
-        <Issue key={issue.id} issue={issue} />
+        <Issue
+          key={issue.id}
+          issue={issue}
+          expanded={expanded.includes(issue.id)}
+          collapsed={!expanded.includes(issue.id) && Object.values(mapping).includes(issue.id)}
+          collapse={() => setExpanded(expanded.filter(e => e !== issue.id))}
+          expand={() => setExpanded([...expanded, issue.id])}
+        />
       ))}
     </div>
   );
