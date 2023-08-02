@@ -4,7 +4,9 @@ import TOKENS from "./tokens";
 const QUERY = `{
   issues(first: 250 filter: {assignee: {isMe: {eq: true}}}) {
     nodes {
+      id
       title
+      parent { id }
       project { name }
       team { name }
       state { name type }
