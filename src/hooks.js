@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import TOKENS from "./tokens";
 
 const QUERY = `{
-  issues {
+  issues(filter: {assignee: {isMe: {eq: true}}}) {
     nodes {
       title
       project { name }
