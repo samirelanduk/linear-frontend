@@ -39,7 +39,11 @@ export const useData = () => {
       }).then(res => res.json()).then(d => {
         newData[token.name] = d.data.issues.nodes;
         if (Object.keys(newData).length === TOKENS.length) {
-          setData(newData);
+          const orderedData = {};
+          for (let token of TOKENS) {
+            orderedData[token.name] = newData[token.name];
+          }
+          setData(orderedData);
         }
       });
     }
