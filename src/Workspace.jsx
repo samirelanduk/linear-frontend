@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import IssuesList from "./IssuesList";
 import Team from "./Team";
 
 const Workspace = props => {
@@ -15,7 +14,7 @@ const Workspace = props => {
   }, {});
 
   return (
-    <div>
+    <div className="w-fit flex-shrink-0">
       <div className="text-3xl">{name}</div>
       <div className="flex flex-col">
         {Object.entries(teams).map(([name, issues]) => (
