@@ -6,6 +6,20 @@ const IssuesList = props => {
 
   const { issues } = props;
 
+  const statusOrders = {
+    "Held": 1,
+    "In Progress": 2,
+    "Todo": 3,
+    "Backlog": 4,
+    "Done": 5,
+  }
+
+  const sortedIssues = issues.sort((a, b) => {
+    if (statusOrders[a.state.name] < statusOrders[b.state.name]) return -1;
+    if (statusOrders[a.state.name] > statusOrders[b.state.name]) return 1;
+    return 0;
+  });
+
   const mapping = {};
   for (let issue of issues) {
     if (issue.parent) {
@@ -13,7 +27,7 @@ const IssuesList = props => {
     }
   }
   const orderedIssues = [];
-  for (let issue of issues) {
+  for (let issue of sortedIssues) {
     if (issue.parent) continue
     orderedIssues.push(issue);
     if (Object.values(mapping).includes(issue.id)) {
