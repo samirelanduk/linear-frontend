@@ -8,7 +8,7 @@ const Team = props => {
   const { name, issues } = props;
 
   const projects = issues.reduce((acc, issue) => {
-    const project = issue.project?.name || null;
+    const project = issue.project?.name || "";
     if (!acc[project]) acc[project] = [];
     acc[project].push(issue);
     return acc;
@@ -17,8 +17,8 @@ const Team = props => {
   return (
     <div key={name} className="flex flex-col">
       <div className="text-2xl">{name}</div>
-      {null in projects && <IssuesList issues={projects[null]} />}
-      {Object.entries(projects).filter(e => e[0] !== null).map(([name, issues]) => (
+      {"" in projects && <IssuesList issues={projects[""]} />}
+      {Object.entries(projects).filter(e => e[0] !== "").map(([name, issues]) => (
         <Project key={name} name={name} issues={issues} />
       ))}
     </div>
