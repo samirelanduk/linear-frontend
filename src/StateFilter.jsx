@@ -15,12 +15,12 @@ const StateFilter = () => {
   };
 
   return (
-    <div>
+    <div className="flex gap-8 border rounded w-fit px-4 py-2">
       {Object.entries(statusColors).map(([name, color]) => (
         <div
           key={name}
           onClick={() => toggleState(name)}
-          className={`flex cursor-pointer ${activeStates.includes(name) ? "" : "opacity-20"}`}
+          className={`flex gap-2 cursor-pointer ${activeStates.includes(name) ? "" : "opacity-20"}`}
         >
           <div className={`w-5 h-5 rounded-full ${color}`} />
           <div className="whitespace-nowrap">{name}</div>

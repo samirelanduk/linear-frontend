@@ -13,9 +13,9 @@ const App = () => {
 
   return (
     <ActiveStateContext.Provider value={[activeStates, setAcitveStates]}>
-      <div>
+      <div className="p-8">
         <StateFilter />
-        <div className="flex overflow-auto gap-6">
+        <div className="flex overflow-auto gap-6 mt-6">
           {Object.entries(data).map(([name, issues]) => (
             <Workspace key={name} name={name} issues={issues} />
           ))}
