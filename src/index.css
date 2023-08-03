@@ -1,3 +1,66 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    body {
+        font-family: "Inter UI", sans-serif;
+    }
+}
+
+
+@font-face {
+  font-family: "Inter UI";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./fonts/Inter-UI-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Inter UI";
+  font-style: italic;
+  font-weight: 400;
+  src: url("./fonts/Inter-UI-Italic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Inter UI";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./fonts/Inter-UI-Medium.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Inter UI";
+  font-style: italic;
+  font-weight: 500;
+  src: url("./fonts/Inter-UI-MediumItalic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Inter UI";
+  font-style: normal;
+  font-weight: 700;
+  src: url("./fonts/Inter-UI-Bold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Inter UI";
+  font-style: italic;
+  font-weight: 700;
+  src: url("./fonts/Inter-UI-BoldItalic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Inter UI";
+  font-style: normal;
+  font-weight: 900;
+  src: url("./fonts/Inter-UI-Black.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Inter UI";
+  font-style: italic;
+  font-weight: 900;
+  src: url("./fonts/Inter-UI-BlackItalic.otf") format("opentype");
+}
