@@ -33,7 +33,7 @@ const Workspace = props => {
 
 Workspace.propTypes = {
   name: PropTypes.string.isRequired,
-  issues: PropTypes.array.isRequired
+  issues: PropTypes.array.isRequired,
 };
 
 export default Workspace;

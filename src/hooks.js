@@ -65,6 +65,8 @@ export const useData = () => {
       });
     }
   }
-  useEffect(fetchData, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
   return data;
 }

@@ -1,17 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { statusColors } from "./states";
 
 const Issue = props => {
 
   const { issue, expanded, collapsed, expand, collapse } = props;
-
-  const statusColors = {
-    "Todo": "bg-purple-200",
-    "In Progress": "bg-yellow-400",
-    "Done": "bg-green-200",
-    "Backlog": "bg-gray-200",
-    "Held": "bg-yellow-200"
-  }
 
   return (
     <div className={`text-base flex items-center gap-2 ${issue.parent ? "ml-10" : ""}`}>
@@ -26,7 +19,11 @@ const Issue = props => {
 };
 
 Issue.propTypes = {
-  issue: PropTypes.object.isRequired
+  issue: PropTypes.object.isRequired,
+  expanded: PropTypes.bool.isRequired,
+  collapsed: PropTypes.bool.isRequired,
+  expand: PropTypes.func.isRequired,
+  collapse: PropTypes.func.isRequired,
 };
 
 export default Issue;

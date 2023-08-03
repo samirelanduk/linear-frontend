@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import Issue from "./Issue";
+import { ActiveStateContext } from "./contexts";
 
 const IssuesList = props => {
 
   const { issues } = props;
 
   const [expanded, setExpanded] = useState([]);
+
+  const [activeStates,] = useContext(ActiveStateContext);
 
   const statusOrders = {
     "Held": 1,
@@ -31,6 +34,7 @@ const IssuesList = props => {
   const orderedIssues = [];
   for (let issue of sortedIssues) {
     if (issue.parent) continue
+    if (!activeStates.includes(issue.state.name)) continue
     orderedIssues.push(issue);
     if (expanded.includes(issue.id) && Object.values(mapping).includes(issue.id)) {
       const children = issues.filter(e => e.parent && e.parent.id === issue.id);
