@@ -7,8 +7,8 @@ const Project = props => {
   const { name, issues } = props;
 
   return (
-    <div>
-      <div className="font-bold">{name}</div>
+    <div className="border-t pt-2">
+      <div className="font-semibold mb-2 text-gray-500">{name}</div>
       <IssuesList issues={issues} />
     </div>
   );

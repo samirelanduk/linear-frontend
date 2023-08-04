@@ -15,12 +15,14 @@ const Team = props => {
   }, {});
 
   return (
-    <div key={name} className="flex flex-col w-96 border rounded py-2 px-4">
-      <div className="text-2xl mb-2 font-medium">{name}</div>
-      {"" in projects && <IssuesList issues={projects[""]} />}
-      {Object.entries(projects).filter(e => e[0] !== "").map(([name, issues]) => (
-        <Project key={name} name={name} issues={issues} />
-      ))}
+    <div key={name} className="flex flex-col w-120 bg-white border rounded py-3 px-4">
+      <div className="text-2xl mb-3 font-medium text-gray-700">{name}</div>
+      <div className="flex flex-col gap-4">
+        {"" in projects && <IssuesList issues={projects[""]} />}
+        {Object.entries(projects).filter(e => e[0] !== "").map(([name, issues]) => (
+          <Project key={name} name={name} issues={issues} />
+        ))}
+      </div>
     </div>
   );
 };

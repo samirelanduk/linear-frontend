@@ -15,7 +15,7 @@ const StateFilter = () => {
   };
 
   return (
-    <div className="flex gap-8 border rounded w-fit px-4 py-2">
+    <div className="flex gap-8 border rounded w-fit px-4 py-2 ml-8 bg-white">
       {Object.entries(statusColors).map(([name, color]) => (
         <div
           key={name}

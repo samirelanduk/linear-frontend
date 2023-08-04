@@ -21,8 +21,8 @@ const Workspace = props => {
 
   return (
     <div className="w-fit flex-shrink-0">
-      <div className="text-3xl mb-2 font-black">{name}</div>
-      <div className="flex flex-col gap-6">
+      <div className="text-3xl mb-5 text-slate-700 font-black">{name}</div>
+      <div className="flex flex-col gap-8">
         {Object.entries(teams).map(([name, issues]) => (
           <Team key={name} name={name} issues={issues} />
         ))}

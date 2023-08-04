@@ -5,7 +5,7 @@ import { ActiveStateContext } from "./contexts";
 
 const IssuesList = props => {
 
-  const { issues } = props;
+  const { issues, title } = props;
 
   const [expanded, setExpanded] = useState([]);
 
@@ -43,23 +43,27 @@ const IssuesList = props => {
   }
 
   return (
-    <div className="flex flex-col">
-      {orderedIssues.map(issue => (
-        <Issue
-          key={issue.id}
-          issue={issue}
-          expanded={expanded.includes(issue.id)}
-          collapsed={!expanded.includes(issue.id) && Object.values(mapping).includes(issue.id)}
-          collapse={() => setExpanded(expanded.filter(e => e !== issue.id))}
-          expand={() => setExpanded([...expanded, issue.id])}
-        />
-      ))}
+    <div>
+      {title && <div className="text-2xl mb-2 font-medium">{title}</div>}
+      <div className="flex flex-col gap-1">
+        {orderedIssues.map(issue => (
+          <Issue
+            key={issue.id}
+            issue={issue}
+            expanded={expanded.includes(issue.id)}
+            collapsed={!expanded.includes(issue.id) && Object.values(mapping).includes(issue.id)}
+            collapse={() => setExpanded(expanded.filter(e => e !== issue.id))}
+            expand={() => setExpanded([...expanded, issue.id])}
+          />
+        ))}
+      </div>
     </div>
   );
 };
 
 IssuesList.propTypes = {
-  issues: PropTypes.array.isRequired
+  issues: PropTypes.array.isRequired,
+  title: PropTypes.string,
 };
 
 export default IssuesList;
