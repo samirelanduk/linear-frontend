@@ -12,7 +12,7 @@ const QUERY = `{
       ]
   }) {
     nodes {
-      id title state { name } parent { id } team { id } identifier
+      id title state { name } parent { id } team { id } identifier sortOrder
     }
   }
   teams { nodes { id name color } }
@@ -29,7 +29,7 @@ const QUERY = `{
         ]
       }) {
         nodes {
-          id title state { name } parent { id } team { id } identifier
+          id title state { name } parent { id } team { id } identifier sortOrder
         }
       }
     }
