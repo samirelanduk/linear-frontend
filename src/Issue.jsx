@@ -16,8 +16,8 @@ const Issue = props => {
 
   const [expanded, setExpanded] = useState(false);
 
-  const outerRing = small ? "w-3 h-3" : "w-5 h-5";
-  const innerCore = small ? "w-2 h-2 left-0.5 top-0.5" : "w-3 h-3 left-1 top-1";
+  const outerRing = small ? "w-4 h-4" : "w-5 h-5";
+  const innerCore = small ? "w-2 h-2 left-1 top-1" : "w-3 h-3 left-1 top-1";
   const fontSize = small ? "text-xs" : "text-sm";
   const border = small ? "" : "border-l-4 pl-2";
   const teamColor = teams.find(team => team.id === issue.team.id)?.color;
