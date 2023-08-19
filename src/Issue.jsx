@@ -9,8 +9,7 @@ const Issue = props => {
   const statusColors = {
     "Todo": "bg-gray-300",
     "In Progress": "bg-yellow-300",
-    "In Review": "bg-blue-300",
-    "Done": "bg-green-300",
+    "Held": "bg-red-300",
   };
 
   const color = statusColors[issue.state.name];
@@ -43,7 +42,7 @@ const Issue = props => {
           issues={issue.children}
           organization={organization}
           small
-          className="ml-4 mt-1"
+          className="ml-4 mt-2"
         />
       )}
     </div>

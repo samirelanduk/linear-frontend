@@ -4,7 +4,7 @@ import TOKENS from "./tokens";
 const QUERY = `{
   organization { urlKey }
   issues(first: 100 filter: {
-    state: { name: { in: ["Todo", "In Progress"]}}
+    state: { name: { in: ["Todo", "In Progress", "Held"]}}
     project: { null: true }
     or: [
         { assignee: { isMe: { eq: true } } }
