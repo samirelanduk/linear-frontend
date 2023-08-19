@@ -16,15 +16,15 @@ const Workspace = props => {
     <div className="pb-6">
       <div className="text-4xl mb-4 font-semibold text-slate-700 whitespace-nowrap">{name}</div>
       {held.length > 0 && (
-        <IssuesList issues={held} organization={data.organization} className="mb-6" />
+        <IssuesList issues={held} organization={data.organization} teams={data.teams} className="mb-6" />
       )}
       {inProgress.length > 0 && (
-        <IssuesList issues={inProgress} organization={data.organization} className="mb-6" />
+        <IssuesList issues={inProgress} organization={data.organization} teams={data.teams} className="mb-6" />
       )}
       {toDo.length > 0 && (
-        <IssuesList issues={toDo} organization={data.organization} className="mb-6" />
+        <IssuesList issues={toDo} organization={data.organization} teams={data.teams} className="mb-6" />
       )}
-      <ProjectsList projects={data.projects} organization={data.organization} />
+      <ProjectsList projects={data.projects} organization={data.organization} teams={data.teams} />
     </div>
   )
 };

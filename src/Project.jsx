@@ -5,14 +5,14 @@ import { assignChildren } from "./utils";
 
 const Project = props => {
 
-  const { project, organization } = props;
+  const { project, organization, teams } = props;
 
   const issues = assignChildren(project.issues);
 
   return (
     <div>
       <div className="mb-3 font-medium text-xl text-slate-600">{project.name}</div>
-      <IssuesList issues={issues} organization={organization} />
+      <IssuesList issues={issues} organization={organization} teams={teams} />
     </div>
   );
 };
@@ -20,6 +20,7 @@ const Project = props => {
 Project.propTypes = {
   project: PropTypes.object.isRequired,
   organization: PropTypes.string.isRequired,
+  teams: PropTypes.array.isRequired,
 };
 
 export default Project;
