@@ -1,22 +1,25 @@
 import React from "react";
 import PropTypes from "prop-types";
 import IssuesList from "./IssuesList";
+import { assignChildren } from "./utils";
 
 const Project = props => {
 
-  const { name, issues } = props;
+  const { project, organization } = props;
+
+  const issues = assignChildren(project.issues);
 
   return (
-    <div className="border-t pt-2">
-      <div className="font-semibold mb-2 text-gray-500">{name}</div>
-      <IssuesList issues={issues} />
+    <div>
+      <div className="mb-3 font-medium text-xl text-slate-600">{project.name}</div>
+      <IssuesList issues={issues} organization={organization} />
     </div>
   );
 };
 
 Project.propTypes = {
-  name: PropTypes.string.isRequired,
-  issues: PropTypes.array.isRequired
+  project: PropTypes.object.isRequired,
+  organization: PropTypes.string.isRequired,
 };
 
 export default Project;

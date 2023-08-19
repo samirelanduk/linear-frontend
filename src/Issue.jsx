@@ -1,31 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { statusColors } from "./states";
+import IssuesList from "./IssuesList";
 
 const Issue = props => {
 
-  const { issue, expanded, collapsed, expand, collapse } = props;
+  const { issue, organization, small } = props;
 
-  const arrowClass = "text-xs";
+  const statusColors = {
+    "Todo": "bg-gray-300",
+    "In Progress": "bg-yellow-300",
+    "In Review": "bg-blue-300",
+    "Done": "bg-green-300",
+  };
+
+  const color = statusColors[issue.state.name];
+
+  const [expanded, setExpanded] = useState(false);
+
+  const outerRing = small ? "w-3 h-3" : "w-5 h-5";
+  const innerCore = small ? "w-2 h-2 left-0.5 top-0.5" : "w-3 h-3 left-1 top-1";
+  const fontSize = small ? "text-xs" : "text-sm";
 
   return (
-    <div className={`text-base flex items-center gap-2 ${issue.parent ? "ml-5" : ""}`}>
-      <div className={`w-2 h-2 rounded-full flex-shrink-0 ${statusColors[issue.state.name]}`} />
-      <div className="text-xs font-medium text-slate-700">{issue.title}</div>
-      <div className="cursor-pointer">
-        {expanded && <div onClick={collapse} className={arrowClass}>&uarr;</div>}
-        {collapsed && <div onClick={expand} className={arrowClass}>&#8595;</div>}
+    <div>
+      <div className="flex gap-1.5 items-center">
+        <div className={`rounded-full flex-shrink-0 relative ${outerRing} ${color}`}>
+          <div className={`rounded-full bg-white absolute ${innerCore}`} />
+        </div>
+        <a
+          href={`https://linear.app/${organization}/issue/${issue.identifier}`}
+          className={`block whitespace-nowrap text-gray-700 ${fontSize}`}
+          target="_blank" rel="noreferrer"
+        >
+          {issue.title}
+        </a>
+        {issue.children?.length > 0 && (
+          <div className="cursor-pointer text-xs text-gray-300" onClick={() => setExpanded(!expanded)}>{expanded ? "▲" : "▼"}</div>
+        )}
       </div>
+      {expanded && (
+        <IssuesList
+          issues={issue.children}
+          organization={organization}
+          small
+          className="ml-4 mt-1"
+        />
+      )}
     </div>
-  );
+  )
 };
 
 Issue.propTypes = {
   issue: PropTypes.object.isRequired,
-  expanded: PropTypes.bool.isRequired,
-  collapsed: PropTypes.bool.isRequired,
-  expand: PropTypes.func.isRequired,
-  collapse: PropTypes.func.isRequired,
+  organization: PropTypes.string.isRequired,
+  small: PropTypes.bool,
 };
 
 export default Issue;
