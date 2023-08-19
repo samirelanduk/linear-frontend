@@ -42,7 +42,7 @@ const IssuesList = props => {
       {sortedIssues.map((issue, index) => (
         <Issue
           key={index} issue={issue} isLast={index === sortedIssues.length - 1}
-          organization={organization} small={small} teams={teams}
+          organization={organization} small={small} teams={teams} isFirst={index === 0}
         />
       ))}
     </div>

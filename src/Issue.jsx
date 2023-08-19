@@ -4,7 +4,7 @@ import IssuesList from "./IssuesList";
 
 const Issue = props => {
 
-  const { issue, organization, small, teams, isLast } = props;
+  const { issue, organization, small, teams, isFirst, isLast } = props;
 
   const statusColors = {
     "Todo": "bg-gray-300",
@@ -23,7 +23,7 @@ const Issue = props => {
   const teamColor = teams.find(team => team.id === issue.team.id)?.color;
 
   return (
-    <div className={`${border} ${isLast ? "" : "pb-2"}`} style={{borderColor: teamColor + "80"}}>
+    <div className={`${border} ${isLast ? "" : "pb-1"} ${isFirst ? "": "pt-1"}`} style={{borderColor: teamColor + "80"}}>
       <div className="flex gap-1.5 items-center">
         <div className={`rounded-full flex-shrink-0 relative ${outerRing} ${color}`}>
           <div className={`rounded-full bg-slate-50 absolute ${innerCore}`} />
@@ -57,6 +57,8 @@ Issue.propTypes = {
   organization: PropTypes.string.isRequired,
   small: PropTypes.bool,
   teams: PropTypes.array.isRequired,
+  isFirst: PropTypes.bool,
+  isLast: PropTypes.bool,
 };
 
 export default Issue;
