@@ -26,7 +26,7 @@ const Issue = props => {
     <div className={`${border} ${isLast ? "" : "pb-2"}`} style={{borderColor: teamColor + "80"}}>
       <div className="flex gap-1.5 items-center">
         <div className={`rounded-full flex-shrink-0 relative ${outerRing} ${color}`}>
-          <div className={`rounded-full bg-white absolute ${innerCore}`} />
+          <div className={`rounded-full bg-slate-50 absolute ${innerCore}`} />
         </div>
         <a
           href={`https://linear.app/${organization}/issue/${issue.identifier}`}

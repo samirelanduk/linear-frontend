@@ -9,7 +9,7 @@ const App = () => {
   if (!data) return <div/>
 
   return (
-    <div className="flex overflow-auto gap-16 mt-6 px-8">
+    <div className="flex overflow-auto gap-16 pt-6 px-8">
       {Object.entries(data).map(([name, data]) => (
         <Workspace key={name} name={name} data={data} />
       ))}

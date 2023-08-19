@@ -5,6 +5,7 @@
 @layer base {
     body {
         font-family: "Inter UI", sans-serif;
+        @apply bg-slate-50;
     }
 }
 
