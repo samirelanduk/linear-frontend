@@ -3,7 +3,7 @@ import TOKENS from "./tokens";
 
 const QUERY = `{
   organization { urlKey }
-  issues(first: 100 filter: {
+  issues(first: 75 filter: {
     state: { name: { in: ["Todo", "In Progress", "Held"]}}
     project: { null: true }
     or: [
@@ -12,11 +12,12 @@ const QUERY = `{
       ]
   }) {
     nodes {
-      id title state { name } parent { id } team { id } identifier sortOrder
+      id title state { name } parent { id } team { id } identifier
+      sortOrder subIssueSortOrder
     }
   }
   teams { nodes { id name color } }
-  projects(first: 40 filter: {
+  projects(first: 20 filter: {
     state: {in: ["started"]}
   }) {
     nodes {
@@ -29,7 +30,8 @@ const QUERY = `{
         ]
       }) {
         nodes {
-          id title state { name } parent { id } team { id } identifier sortOrder
+          id title state { name } parent { id } team { id } identifier
+          sortOrder subIssueSortOrder
         }
       }
     }

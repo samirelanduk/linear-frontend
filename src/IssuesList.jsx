@@ -15,8 +15,8 @@ const IssuesList = props => {
   });
 
   const sortedIssues = issues.sort((a, b) => {
-    if (a.sortOrder < b.sortOrder) return -1;
-    if (a.sortOrder > b.sortOrder) return 1;
+    if ((a.subIssueSortOrder || a.sortOrder) < (b.subIssueSortOrder || b.sortOrder)) return -1;
+    if ((a.subIssueSortOrder || a.sortOrder) > (b.subIssueSortOrder || b.sortOrder)) return 1;
     return 0;
   }).sort((a, b) => {
     const aTeam = teams.find(team => team.id === a.team.id);
