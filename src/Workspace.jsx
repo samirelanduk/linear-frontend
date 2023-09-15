@@ -10,6 +10,7 @@ const Workspace = props => {
   const issues = assignChildren(data.issues);
   const held = issues.filter(issue => issue.state.name === "Held");
   const inProgress = issues.filter(issue => issue.state.name === "In Progress");
+  const upNext = issues.filter(issue => issue.state.name === "Up Next");
   const toDo = issues.filter(issue => issue.state.name === "Todo");
 
   return (
@@ -20,6 +21,9 @@ const Workspace = props => {
       )}
       {inProgress.length > 0 && (
         <IssuesList issues={inProgress} organization={data.organization} teams={data.teams} className="mb-6" />
+      )}
+      {upNext.length > 0 && (
+        <IssuesList issues={upNext} organization={data.organization} teams={data.teams} className="mb-6" />
       )}
       {toDo.length > 0 && (
         <IssuesList issues={toDo} organization={data.organization} teams={data.teams} className="mb-6" />

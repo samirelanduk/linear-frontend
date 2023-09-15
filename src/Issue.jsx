@@ -8,6 +8,7 @@ const Issue = props => {
 
   const statusColors = {
     "Todo": "bg-gray-300",
+    "Up Next": "bg-gray-400",
     "In Progress": "bg-yellow-300",
     "Held": "bg-red-300",
   };

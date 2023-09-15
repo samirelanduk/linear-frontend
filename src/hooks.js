@@ -3,8 +3,8 @@ import TOKENS from "./tokens";
 
 const QUERY = `{
   organization { urlKey }
-  issues(first: 75 filter: {
-    state: { name: { in: ["Todo", "In Progress", "Held"]}}
+  issues(first: 250 filter: {
+    state: { name: { in: ["Todo", "In Progress", "Held", "Up Next"]}}
     project: { null: true }
     or: [
         { assignee: { isMe: { eq: true } } }
@@ -23,7 +23,7 @@ const QUERY = `{
     nodes {
       id name
       issues(filter: {
-        state: { name: { in: ["Todo", "In Progress"]}}
+        state: { name: { in: ["Todo", "In Progress", "Held", "Up Next"]}}
         or: [
             { assignee: { isMe: { eq: true } } }
             { parent: { assignee: { isMe: { eq: true } } } }

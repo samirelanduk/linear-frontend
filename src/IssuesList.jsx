@@ -28,7 +28,8 @@ const IssuesList = props => {
     return 0;
   }).sort((a, b) => {
     const rank = {
-      "Todo": 3,
+      "Todo": 4,
+      "Up Next": 3,
       "In Progress": 2,
       "Held": 1,
     }
