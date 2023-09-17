@@ -76,14 +76,41 @@ const ProjectsTab = props => {
   const projectPadding = 10;
   const colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-purple-500", "bg-pink-500", "bg-indigo-500", "bg-gray-500"];
   
+  // Points to do vertical lines
+  const monthStarts = [];
+  let dt = new Date(startDate);
+  while (dt <= new Date(endDate)) {
+    const day = dt.getDate();
+    if (day === 1) monthStarts.push(dt.toISOString().split("T")[0]);
+    dt.setDate(dt.getDate() + 1);
+  }
+  monthStarts.shift(0);
+  console.log(monthStarts)
+
+
 
   return (
     <div className="pt-6 px-8">
+      
 
       <div
         className="bg-gray-200 rounded py-4 flex flex-col gap-4 relative"
         style={{height: `${projectHeight * projects.length}px`}}
       >
+        {monthStarts.map((date, index) => {
+          const left = dayDiff(startDate, date) / periodWidth * 100;
+          return (
+            <div
+              className="absolute bg-gray-300"
+              style={{
+                top: 0,
+                left: `${left}%`,
+                width: "1px",
+                height: "100%",
+              }}
+            />
+          )
+        })}
         {projects.map((project, projectIndex) => {
           const milestones = project.projectMilestones.nodes.filter(m => m.targetDate);
           return milestones.map((milestone, milestoneIndex) => {
