@@ -85,7 +85,11 @@ const ProjectsTab = props => {
     dt.setDate(dt.getDate() + 1);
   }
   monthStarts.shift(0);
-  console.log(monthStarts)
+
+
+  const today = new Date().toISOString().split("T")[0];
+  const todayLeft = dayDiff(startDate, today) / periodWidth * 100;
+
 
 
 
@@ -111,6 +115,15 @@ const ProjectsTab = props => {
             />
           )
         })}
+        <div
+          className="absolute bg-gray-800 z-50"
+          style={{
+            top: 0,
+            left: `${todayLeft}%`,
+            width: "1px",
+            height: "100%",
+          }}
+        />
         {projects.map((project, projectIndex) => {
           const milestones = project.projectMilestones.nodes.filter(m => m.targetDate);
           return milestones.map((milestone, milestoneIndex) => {
