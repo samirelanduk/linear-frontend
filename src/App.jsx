@@ -3,12 +3,13 @@ import { useData } from "./hooks";
 import Workspace from "./Workspace";
 import Tabs from "./Tabs";
 import IssuesTab from "./IssuesTab";
+import ProjectsTab from "./ProjectsTab";
 
 const App = () => {
   
   const data = useData();
 
-  const [tab, setTab] = useState("issues");
+  const [tab, setTab] = useState("projects");
 
   if (!data) return <div/>
 
@@ -16,6 +17,7 @@ const App = () => {
     <div>
       <Tabs activeTab={tab} setActiveTab={setTab} />
       {tab === "issues" && <IssuesTab data={data} />}
+      {tab === "projects" && <ProjectsTab data={data} />}
     </div>
   );
 };

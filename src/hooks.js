@@ -21,7 +21,8 @@ const QUERY = `{
     state: {in: ["started"]}
   }) {
     nodes {
-      id name
+      id name startDate
+      projectMilestones { nodes { id name targetDate sortOrder } }
       issues(filter: {
         state: { name: { in: ["Todo", "In Progress", "Held", "Up Next"]}}
         or: [
@@ -31,7 +32,7 @@ const QUERY = `{
       }) {
         nodes {
           id title state { name } parent { id } team { id } identifier
-          sortOrder subIssueSortOrder
+          sortOrder subIssueSortOrder projectMilestone { id }
         }
       }
     }

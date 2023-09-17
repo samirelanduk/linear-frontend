@@ -16,7 +16,7 @@ const IssuesTab = props => {
 };
 
 IssuesTab.propTypes = {
-  
+  data: PropTypes.object.isRequired,
 };
 
 export default IssuesTab;
