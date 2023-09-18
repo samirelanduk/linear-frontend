@@ -121,23 +121,6 @@ const ProjectsTab = props => {
           />
         ))}
       </div>
-
-      <div className="flex flex-col gap-4">
-        {projects.map((project, index) => (
-          <div key={index} className="flex flex-col gap-2">
-            <div className="text-2xl font-semibold text-slate-700">{project.name} {project.startDate}</div>
-            <div className="flex flex-col gap-2">
-              {project.projectMilestones.nodes.map((milestone, index) => (
-                <div key={index} className="flex items-baseline gap-2">
-                  <div className="text-xl font-medium text-slate-700">{milestone.name}</div>
-                  <div>{milestone.targetDate}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
     </div>
   );
 };
