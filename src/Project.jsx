@@ -7,7 +7,9 @@ const Project = props => {
 
   const { project, organization, teams } = props;
 
-  const issues = assignChildren(project.issues);
+  const issues = assignChildren(project.issues).filter(
+    issue => ["Todo", "In Progress", "Held", "Up Next"].includes(issue.state.name)
+  );
 
   return (
     <div>
