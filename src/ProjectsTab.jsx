@@ -6,11 +6,19 @@ const ProjectsTab = props => {
 
   const { data } = props;
 
-  // Get projects which have milestones
-  const projects = [...Object.values(data)].reduce((acc, val) => {
-    return [...acc, ...val.projects.map(p => ({...p, organization: val.organization}))]
-  }, []).filter(p => p.projectMilestones.nodes.length > 0);
+  const projectsByWorkspace = {};
+  for (const [workspaceName, workspaceData] of Object.entries(data)) {
+    projectsByWorkspace[workspaceName] = [];
+    for (const project of workspaceData.projects) {
+      if (project.projectMilestones.nodes.length === 0) continue;
+      project.organization = workspaceData.organization;
+      projectsByWorkspace[workspaceName].push(project);
+    }
+    if (projectsByWorkspace[workspaceName].length === 0) delete projectsByWorkspace[workspaceName];
+  }
 
+  // Get projects as flat list
+  const projects = Object.values(projectsByWorkspace).reduce((acc, val) => [...acc, ...val], []);
   if (projects.length === 0) return;
 
   // Sort projects by start date and then by sort order
@@ -87,38 +95,35 @@ const ProjectsTab = props => {
 
   return (
     <div className="pt-6 px-8">
-      <div className="bg-gray-200 rounded py-4 flex flex-col gap-4 relative">
+      <div className="bg-gray-200 rounded py-4 flex flex-col gap-8 relative">
         {monthStarts.map((date, index) => {
           const left = dayDiff(startDate, date) / periodWidth * 100;
           return (
             <div
               className="absolute bg-gray-300"
               key={index}
-              style={{
-                top: 0,
-                left: `${left}%`,
-                width: "1px",
-                height: "100%",
-              }}
+              style={{top: 0, left: `${left}%`, width: "1px", height: "100%"}}
             />
           )
         })}
         <div
           className="absolute bg-gray-800 z-50"
-          style={{
-            top: 0,
-            left: `${todayLeft}%`,
-            width: "1px",
-            height: "100%",
-          }}
+          style={{top: 0, left: `${todayLeft}%`, width: "1px", height: "100%"}}
         />
-        {projects.map((project, index) => (
-          <ProjectBar
-            key={index}
-            project={project}
-            periodStart={startDate}
-            periodEnd={endDate}
-          />
+        {Object.entries(projectsByWorkspace).map(([workspaceName, projects]) => (
+          <div>
+            <div className="text-lg text-center mb-2 font-medium">{workspaceName}</div>
+            <div className="flex flex-col gap-4">
+              {projects.map((project, index) => (
+                <ProjectBar
+                  key={index}
+                  project={project}
+                  periodStart={startDate}
+                  periodEnd={endDate}
+                />
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </div>
