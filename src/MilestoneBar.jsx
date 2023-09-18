@@ -51,9 +51,11 @@ const MilestoneBar = props => {
     className = "bg-blue-200 border-blue-400";
   }
 
+  const firstLastClass = `${isLast ? "rounded-r" : "border-r"} ${previous ? "" : "rounded-l"}`;
+
   return (
     <div
-      className={`h-full text-xs flex justify-center text-green-600 items-center ${isLast ? "" : "border-r"} ${className}`}
+      className={`h-full text-xs flex justify-center text-green-600 items-center ${firstLastClass} ${className}`}
       style={{width: `${milestoneWidth}%`}}
       data-tooltip-id={`milestone-${milestone.id}`}
       data-tooltip-float={true}
