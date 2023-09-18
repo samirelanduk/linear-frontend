@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { dayDiff } from "./utils";
-import { Tooltip } from "react-tooltip"
+import MilestoneBar from "./MilestoneBar";
 
 const ProjectBar = props => {
 
@@ -28,8 +28,6 @@ const ProjectBar = props => {
 
   const projectDaysWidth = dayDiff(project.startDate, lastMilestone.targetDate) + 1;
 
-  const today = new Date().toISOString().split("T")[0];
-
   return (
     <div
       className="h-12 relative flex rounded overflow-hidden"
@@ -38,79 +36,24 @@ const ProjectBar = props => {
         marginRight: `${marginRight}%`,
       }}
     >
-      {milestones.map((milestone, index) => {
-        let milestoneStart;
-        if (index === 0) {
-          milestoneStart = project.startDate;
-        } else {
-          milestoneStart = milestones[index - 1].targetDate;
-          const dt = new Date(milestoneStart);
-          dt.setDate(dt.getDate() + 1);
-          milestoneStart = dt.toISOString().split("T")[0];
-        }
-        const milestoneWidthDays = dayDiff(milestoneStart, milestone.targetDate) + 1;
-        const milestoneWidth = milestoneWidthDays * 100 / projectDaysWidth;
-
-        const isLast = index === milestones.length - 1;
-
-        const issues = issuesByMilestoneId[milestone.id] || [];
-        const completedIssueCount = issues.filter(issue => issue.state.name === "Done").length;
-        const remainingIssueCount = issues.length - completedIssueCount;
-        const pcComplete = Math.round(completedIssueCount / issues.length * 100);
-
-        let state = "";
-        let className = "";
-
-        // Is start date in the past?
-        const startDateInPast = dayDiff(milestoneStart, today) > 0;
-
-        // Is end date in the past?
-        const endDateInPast = dayDiff(milestone.targetDate, today) > 0;
-
-        // Is it done?
-        const isDone = remainingIssueCount === 0;
-
-        if (endDateInPast) {
-          if (isDone) {
-            state = "COMPLETED";
-            className = "bg-blue-400 border-blue-800";
-          } else {
-            state = "OVRERDUE";
-            className = "bg-red-400 border-red-800";
-          }
-        } else if (startDateInPast) {
-          state = "ONGOING";
-          className = "bg-green-300 border-green-800";
-        } else {
-          state = "UPCOMING";
-          className = "bg-blue-200 border-blue-400";
-        }
-
-        
-        return (
-          <>
-            <div
-              className={`h-full text-xs flex justify-center text-green-600 items-center ${isLast ? "" : "border-r"} ${className}`}
-              style={{width: `${milestoneWidth}%`}}
-              data-tooltip-id={`milestone-${milestone.id}`}
-              data-tooltip-float={true}
-              data-tooltip-position-strategy="fixed"
-            >
-              {state === "ONGOING" && `${pcComplete}%`}
-            </div>
-            <Tooltip id={`milestone-${milestone.id}`}>
-              <div>{project.name}</div>
-              <div>{milestone.name}</div>
-            </Tooltip>
-          </>
-        )
-      })}
+      {milestones.map((milestone, index) => (
+        <MilestoneBar
+          milestone={milestone}
+          project={project}
+          previous={milestones[index - 1]}
+          isLast={index === milestones.length - 1}
+          issuesByMilestoneId={issuesByMilestoneId}
+          projectDaysWidth={projectDaysWidth}
+        />
+      ))}
     </div>
   );
 };
 
 ProjectBar.propTypes = {
-  
+  project: PropTypes.object.isRequired,
+  periodStart: PropTypes.string.isRequired,
+  periodEnd: PropTypes.string.isRequired,
 };
 
 export default ProjectBar;
