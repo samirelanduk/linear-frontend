@@ -15,3 +15,10 @@ export const assignChildren = issues => {
   }
   return [...Object.values(issuesById)];
 }
+
+export const dayDiff = (date1, date2) => {
+  const dt1 = new Date(date1);
+  const dt2 = new Date(date2);
+  const diff = dt2.getTime() - dt1.getTime();
+  return diff / (1000 * 60 * 60 * 24);
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import ProjectBar from "./ProjectBar";
 
 const ProjectsTab = props => {
 
@@ -12,6 +13,7 @@ const ProjectsTab = props => {
 
   if (projects.length === 0) return;
 
+  // Sort projects by start date and then by sort order
   for (const project of projects) {
     project.projectMilestones.nodes.sort((a, b) => {
       if (a.targetDate && b.targetDate) {
@@ -69,12 +71,6 @@ const ProjectsTab = props => {
 
   // What is the width of the period in days
   const periodWidth = dayDiff(startDate, endDate) + 1;
-
-  console.log(startDate, endDate, periodWidth)
-  
-  const projectHeight = 100;
-  const projectPadding = 10;
-  const colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-purple-500", "bg-pink-500", "bg-indigo-500", "bg-gray-500"];
   
   // Points to do vertical lines
   const monthStarts = [];
@@ -86,26 +82,18 @@ const ProjectsTab = props => {
   }
   monthStarts.shift(0);
 
-
   const today = new Date().toISOString().split("T")[0];
   const todayLeft = dayDiff(startDate, today) / periodWidth * 100;
 
-
-
-
   return (
     <div className="pt-6 px-8">
-      
-
-      <div
-        className="bg-gray-200 rounded py-4 flex flex-col gap-4 relative"
-        style={{height: `${projectHeight * projects.length}px`}}
-      >
+      <div className="bg-gray-200 rounded py-4 flex flex-col gap-4 relative">
         {monthStarts.map((date, index) => {
           const left = dayDiff(startDate, date) / periodWidth * 100;
           return (
             <div
               className="absolute bg-gray-300"
+              key={index}
               style={{
                 top: 0,
                 left: `${left}%`,
@@ -124,74 +112,14 @@ const ProjectsTab = props => {
             height: "100%",
           }}
         />
-        {projects.map((project, projectIndex) => {
-          const milestones = project.projectMilestones.nodes.filter(m => m.targetDate);
-          return milestones.map((milestone, milestoneIndex) => {
-            // Start date of milestone
-            let milestoneStartDate;
-            if (milestoneIndex === 0) {
-              milestoneStartDate = project.startDate;
-            } else {
-              milestoneStartDate = milestones[milestoneIndex - 1].targetDate;
-              // Add day to start date
-              const dt = new Date(milestoneStartDate);
-              dt.setDate(dt.getDate() + 1);
-              milestoneStartDate = dt.toISOString().split("T")[0];
-            }
-
-            // End date of milestone
-            const milestoneEndDate = milestone.targetDate;
-
-            // Width of milestone in days
-            const milestoneWidth = dayDiff(milestoneStartDate, milestoneEndDate) + 1;
-
-            
-            // What is the top position?
-            const top = projectHeight * projectIndex + projectPadding;
-            
-            // What is the left position?
-            const daysSinceStart = dayDiff(startDate, milestoneStartDate);
-            console.log(milestoneStartDate, milestoneEndDate, milestoneWidth, daysSinceStart)
-            const left = daysSinceStart / periodWidth * 100;
-
-            // What is the width?
-            const width = milestoneWidth / periodWidth * 100;
-
-            // What is the color?
-            const index = projectIndex * projects.length + milestoneIndex;
-            const color = colors[index % colors.length];
-
-            return (
-              <div
-                className={`absolute ${color} opacity-70`}
-                style={{
-                  top: `${top}px`,
-                  left: `${left}%`,
-                  width: `${width}%`,
-                  height: `${projectHeight - (2 * projectPadding)}px`,
-                }}
-              />
-            )
-
-            /* const top = projectHeight * projectIndex;
-            if (milestoneIndex !== 0) return;
-            const startDate = project.startDate;
-            const endDate = milestone.targetDate;
-            const start = dateToNumber(startDate, earliestDate);
-            const end = dateToNumber(endDate, earliestDate);
-            const milestoneWidth = end - start;
-            return (
-              <div
-                className={`absolute ${colors[milestoneIndex % colors.length]} w-10}`}
-                style={{
-                  top: `${top}px`,
-                  left: milestoneIndex, right: milestoneIndex + 10,
-                  height: `${projectHeight}px`,
-                }}
-              />
-            ) */
-          })
-        })}
+        {projects.map((project, index) => (
+          <ProjectBar
+            key={index}
+            project={project}
+            periodStart={startDate}
+            periodEnd={endDate}
+          />
+        ))}
       </div>
 
       <div className="flex flex-col gap-4">
