@@ -28,8 +28,6 @@ const ProjectBar = props => {
 
   const projectDaysWidth = dayDiff(project.startDate, lastMilestone.targetDate) + 1;
 
-  /* const x = dayDiff(startDate, endDate) + dayDiff(periodStart, startDate);
-  console.log(x) */
   const className = daysUntilEnd < daysSinceStart ? "right-[100%] pr-2" : "pl-2 left-[100%]";
 
   return (
@@ -43,6 +41,7 @@ const ProjectBar = props => {
       <div className={`absolute whitespace-nowrap text-sm text-slate-500 ${className}`}>{project.name}</div>
       {milestones.map((milestone, index) => (
         <MilestoneBar
+          key={index}
           milestone={milestone}
           project={project}
           previous={milestones[index - 1]}

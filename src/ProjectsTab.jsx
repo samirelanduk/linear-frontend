@@ -94,16 +94,34 @@ const ProjectsTab = props => {
   const todayLeft = dayDiff(startDate, today) / periodWidth * 100;
 
   return (
-    <div className="pt-6 px-8">
+    <div className="pt-10 px-8">
       <div className="bg-gray-200 rounded py-4 flex flex-col gap-8 relative">
         {monthStarts.map((date, index) => {
           const left = dayDiff(startDate, date) / periodWidth * 100;
+          const month = parseInt(date.split("-")[1]);
+          const monthName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][month - 1];
+          const label = month === 1 ? date.split("-")[0] : monthName;
+          const screenClass = (month - 1) % 3 === 0 ? "" : "hidden sm:block";
+          const className = `absolute text-xs text-gray-500 ${screenClass} ${month === 1 ? "-ml-3.5" : "-ml-3"}`
           return (
-            <div
-              className="absolute bg-gray-300"
-              key={index}
-              style={{top: 0, left: `${left}%`, width: "1px", height: "100%"}}
-            />
+            <React.Fragment key={index}>
+              <div
+                className={`${className} -top-4`}
+                style={{left: `${left}%`}}
+              >
+                {label}
+              </div>
+              <div
+                className="absolute bg-gray-300"
+                style={{top: 0, left: `${left}%`, width: "1px", height: "100%"}}
+              />
+              <div
+                className={`${className} -bottom-4`}
+                style={{left: `${left}%`}}
+              >
+                {label}
+              </div>
+            </React.Fragment>
           )
         })}
         <div
@@ -111,7 +129,7 @@ const ProjectsTab = props => {
           style={{top: 0, left: `${todayLeft}%`, width: "1px", height: "100%"}}
         />
         {Object.entries(projectsByWorkspace).map(([workspaceName, projects]) => (
-          <div>
+          <div key={workspaceName}>
             <div className="text-lg text-center mb-2 font-medium">{workspaceName}</div>
             <div className="flex flex-col gap-4">
               {projects.map((project, index) => (

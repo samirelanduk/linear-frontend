@@ -10,7 +10,7 @@ const App = () => {
   
   const data = useData();
 
-  const [tab, setTab] = useState("projects");
+  const [tab, setTab] = useState("issues");
 
   if (Object.keys(data).length === 0) {
     return (
