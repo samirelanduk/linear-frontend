@@ -44,8 +44,13 @@ const MilestoneBar = props => {
       className = "bg-red-400 border-red-800";
     }
   } else if (startDateInPast) {
-    state = "ONGOING";
-    className = "bg-green-300 border-green-500";
+    if (isDone) {
+      state = "COMPLETED";
+      className = "bg-blue-400 border-blue-800";
+    } else {
+      state = "ONGOING";
+      className = "bg-green-300 border-green-500";
+    }
   } else {
     state = "UPCOMING";
     className = "bg-blue-200 border-blue-400";
