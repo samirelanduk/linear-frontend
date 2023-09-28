@@ -30,7 +30,7 @@ const MilestoneBar = props => {
 
   // State
   const today = new Date().toISOString().split("T")[0];
-  const startDateInPast = dayDiff(milestoneStart, today) > 0;
+  const startDateInPast = dayDiff(milestoneStart, today) >= 0;
   const endDateInPast = dayDiff(milestone.targetDate, today) > 0;
   const isDone = remainingIssueCount === 0;
   let state = "";
