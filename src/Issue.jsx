@@ -23,6 +23,8 @@ const Issue = props => {
   const border = small ? "" : "border-l-4 pl-2";
   const teamColor = teams.find(team => team.id === issue.team.id)?.color;
 
+  const displayableChilden = issue.children?.filter(child => child.state.name !== "Done") || [];
+
   return (
     <div className={`${border} ${isLast ? "" : "pb-1"} ${isFirst ? "": "pt-1"}`} style={{borderColor: teamColor + "80"}}>
       <div className="flex gap-1.5 items-center">
@@ -36,13 +38,13 @@ const Issue = props => {
         >
           {issue.title}
         </a>
-        {issue.children?.length > 0 && (
+        {displayableChilden.length > 0 && (
           <div className="cursor-pointer text-xs text-gray-300" onClick={() => setExpanded(!expanded)}>{expanded ? "▲" : "▼"}</div>
         )}
       </div>
       {expanded && (
         <IssuesList
-          issues={issue.children}
+          issues={displayableChilden}
           organization={organization}
           small
           teams={teams}
