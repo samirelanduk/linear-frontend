@@ -37,6 +37,7 @@ const App = () => {
         assignee { isMe }
         team { id }
         parent { id }
+        state { name type }
       }
     }
   }`
@@ -106,7 +107,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-10 py-8">
+    <div className="flex flex-col gap-10 py-8 bg-slate-700 text-white min-h-svh">
       {Object.entries(data).map(([name, organization]) => (
         <Organization key={name} name={name} organization={organization} />
       ))}

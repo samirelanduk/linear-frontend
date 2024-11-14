@@ -30,12 +30,12 @@ const Team = props => {
 
   return (
     <div
-      className="w-96 flex-shrink-0 border-2 rounded"
+      className="max-w-128 min-w-72 flex-shrink-0 border-3 rounded-md"
       style={{borderColor: `${team.color}80`, backgroundColor: `${team.color}08`}}
     >
       <div
         style={{borderColor: `${team.color}80`}}
-        className="px-4 py-0.5 border-b-2 text-lg font-semibold text-slate-700"
+        className="px-4 py-0.5 border-b-3 text-lg font-semibold"
       >
         {team.name}
       </div>
@@ -44,9 +44,11 @@ const Team = props => {
           <ClipLoader color={team.color} size={48} cssOverride={{borderWidth: "4px"}} speedMultiplier={1.2} />
         </div>
       )}
-      <div className="px-4 py-1 text-sm max-h-64 overflow-y-auto">
-        {parentIssues.map(issue => <Issue key={issue.id} issue={issue} />)}
-      </div>
+      {!organization.issuesLoading && (
+        <div className="px-4 pt-2.5 pb-1 text-sm max-h-64 overflow-y-auto flex flex-col gap-1">
+          {parentIssues.map(issue => <Issue key={issue.id} issue={issue} />)}
+        </div>
+      )}
     </div>
   );
 };
