@@ -7,7 +7,40 @@ const Team = props => {
   const { team, organization } = props;
 
   const issues = Object.values(organization.issues).filter(issue => issue.team.id === team.id);
+  const milestonesById = Object.values(organization.projects).reduce((acc, project) => {
+    for (const milestone of project.milestones) {
+      acc[milestone.id] = milestone;
+    }
+    return acc;
+  }, {});
 
+  // Sort issues by sort order
+  issues.sort((a, b) => a.sortOrder - b.sortOrder);
+
+  // Sort issues by sub-issue sort order
+  issues.sort((a, b) => a.subIssueSortOrder - b.subIssueSortOrder);
+
+  // Sort issues by project milestone
+  issues.sort((a, b) => {
+    if (a.projectMilestone === null && b.projectMilestone === null) return 0;
+    if (a.projectMilestone === null) return 1;
+    if (b.projectMilestone === null) return -1;
+    return new Date(milestonesById[a.projectMilestone.id].sortOrder) - new Date(milestonesById[b.projectMilestone.id].sortOrder);
+  });
+
+  // Sort issues by project
+  issues.sort((a, b) => {
+    if (a.project === null && b.project === null) return 0;
+    if (a.project === null) return 1;
+    if (b.project === null) return -1;
+    return a.project.id.localeCompare(b.project.id);
+  });
+
+  // Sort issues by state
+  const stateOrder = ["backlog", "unstarted", "started", "completed", "canceled"];
+  issues.sort((a, b) => stateOrder.indexOf(a.state.type) - stateOrder.indexOf(b.state.type));
+
+  // Sort issues by due date
   issues.sort((a, b) => {
     if (a.dueDate === null && b.dueDate === null) return 0;
     if (a.dueDate === null) return 1;

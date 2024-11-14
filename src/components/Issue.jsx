@@ -38,7 +38,7 @@ const Issue = props => {
     "unstarted": "border-white",
     "started": "border-orange-500",
     "completed": "border-green-500 bg-green-600 bg-opacity-60",
-    "canceled": "border-gray-200",
+    "canceled": "border-red-300",
   }[issue.state.type];
 
   const project = issue.project && organization.projects[issue.project.id];
@@ -61,7 +61,7 @@ const Issue = props => {
           )}
         </div>
         {issue.dueDate && (
-          <div className={`text-2xs flex gap-0.5 -mt-px ${overdue ? "text-red-500" : dueSoon ? "text-yellow-500" : dueLater ? "text-green-500" : ""} ${isMe ? "" : "opacity-50"}`}>
+          <div className={`text-2xs w-20 flex gap-0.5 -mt-px ${overdue ? "text-red-500" : dueSoon ? "text-yellow-500" : dueLater ? "text-green-500" : ""} ${isMe ? "" : "opacity-50"}`}>
             <CalendarIcon className={`w-3 ${overdue ? "fill-red-500" : dueSoon ? "fill-yellow-500" : dueLater ? "fill-green-500" : ""}`} />
             {formatDate(issue.dueDate)}
           </div> 
