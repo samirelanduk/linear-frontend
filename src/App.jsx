@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Organization from "./components/Organization";
 import { loadTokens } from "./tokens";
+import StatesToggle from "./components/StatesToggle";
 
 const App = () => {
 
@@ -17,6 +18,8 @@ const App = () => {
     };
     return acc;
   }, {}));
+
+  const [states, setStates] = useState(["unstarted", "started"]);
 
   const TEAMS = `{
     teams(first: 100) {
@@ -147,8 +150,9 @@ const App = () => {
 
   return (
     <div className="flex flex-col gap-10 py-8 bg-slate-700 text-white min-h-svh">
+      <StatesToggle states={states} setStates={setStates} className="fixed right-10" />
       {Object.entries(data).map(([name, organization]) => (
-        <Organization key={name} name={name} organization={organization} />
+        <Organization key={name} name={name} organization={organization} states={states} />
       ))}
     </div>
   );

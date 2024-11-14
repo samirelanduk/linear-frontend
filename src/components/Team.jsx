@@ -4,7 +4,7 @@ import Issue from "./Issue";
 
 const Team = props => {
 
-  const { team, organization } = props;
+  const { team, organization, states } = props;
 
   const issues = Object.values(organization.issues).filter(issue => issue.team.id === team.id);
   const milestonesById = Object.values(organization.projects).reduce((acc, project) => {
@@ -59,7 +59,7 @@ const Team = props => {
     if (issue.parent !== null) issue.parent = issuesById[issue.parent.id];
   }
 
-  const parentIssues = Object.values(issuesById).filter(issue => issue.parent === null);
+  const parentIssues = Object.values(issuesById).filter(issue => issue.parent === null && states.includes(issue.state.type));
 
   return (
     <div
@@ -79,7 +79,7 @@ const Team = props => {
       )}
       {!organization.issuesLoading && (
         <div className="px-4 py-3 pr-6 text-sm max-h-96 overflow-y-auto flex flex-col gap-3">
-          {parentIssues.map(issue => <Issue key={issue.id} issue={issue} organization={organization} />)}
+          {parentIssues.map(issue => <Issue key={issue.id} issue={issue} organization={organization} states={states} />)}
         </div>
       )}
     </div>
@@ -89,6 +89,7 @@ const Team = props => {
 Team.propTypes = {
   team: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
+  states: PropTypes.array.isRequired,
 };
 
 export default Team;

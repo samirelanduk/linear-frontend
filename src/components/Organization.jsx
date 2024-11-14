@@ -5,7 +5,7 @@ import Team from "./Team";
 
 const Organization = props => {
 
-  const { name, organization } = props;
+  const { name, organization, states } = props;
 
   return (
     <div className="w-full">
@@ -16,7 +16,7 @@ const Organization = props => {
       {!organization.teamsLoading && (
         <div className="flex overflow-auto gap-10">
           <div className="w-0" />
-          {Object.values(organization.teams).map(team => <Team key={team.id} team={team} organization={organization} />)}
+          {Object.values(organization.teams).map(team => <Team key={team.id} team={team} organization={organization} states={states} />)}
           <div className="w-0" />
         </div>
       )}
@@ -27,6 +27,7 @@ const Organization = props => {
 Organization.propTypes = {
   name: PropTypes.string.isRequired,
   organization: PropTypes.object.isRequired,
+  states: PropTypes.array.isRequired,
 };
 
 export default Organization;

@@ -5,7 +5,7 @@ import TriangleIcon from "../assets/triangle.svg?react";
 
 const Issue = props => {
 
-  const { issue, organization } = props;
+  const { issue, organization, states } = props;
 
   const [tasksCollapsed, setTasksCollapsed] = useState(null);
 
@@ -48,6 +48,8 @@ const Issue = props => {
   }, {});
   const milestone = issue.projectMilestone && milestonesById[issue.projectMilestone.id];
 
+  const subtasks = issue.children.filter(child => states.includes(child.state.type));
+
   return (
     <div className={`${props.className || ""}`}>
       <div className={`py-px flex items-center gap-1.5 ${isMe ? "" : "opacity-20"}`}>
@@ -56,12 +58,12 @@ const Issue = props => {
       </div>
       <div className="flex gap-2 items-center mt-1">
         <div className="w-4 h-2 -mr-0.5" onClick={() => setTasksCollapsed(!collapsed)}>
-          {issue.children.length > 0 && (
+          {subtasks.length > 0 && (
             <TriangleIcon className={`w-full bg-yellow-5 relative bottom-1 h-auto fill-indigo-200 opacity-50 hover:opacity-80 cursor-pointer transition-[transform] ${collapsed ? "-rotate-90" : "rotate-0"}`} />
           )}
         </div>
         {issue.dueDate && (
-          <div className={`text-2xs w-20 flex gap-0.5 -mt-px ${overdue ? "text-red-500" : dueSoon ? "text-yellow-500" : dueLater ? "text-green-500" : ""} ${isMe ? "" : "opacity-50"}`}>
+          <div className={`text-2xs w-22 flex gap-0.5 -mt-px ${overdue ? "text-red-500" : dueSoon ? "text-yellow-500" : dueLater ? "text-green-500" : ""} ${isMe ? "" : "opacity-50"}`}>
             <CalendarIcon className={`w-3 ${overdue ? "fill-red-500" : dueSoon ? "fill-yellow-500" : dueLater ? "fill-green-500" : ""}`} />
             {formatDate(issue.dueDate)}
           </div> 
@@ -73,10 +75,10 @@ const Issue = props => {
           </div> 
         )}
       </div>
-      {issue.children.length > 0 && !collapsed && (
+      {subtasks.length > 0 && !collapsed && (
         <div className="flex flex-col gap-2 mt-2">
-          {issue.children.map(child => (
-            <Issue key={child.id} issue={child} organization={organization} className="ml-6" />
+          {subtasks.map(child => (
+            <Issue key={child.id} issue={child} organization={organization} states={states} className="ml-6" />
           ))}
         </div>
       )}
@@ -87,6 +89,7 @@ const Issue = props => {
 Issue.propTypes = {
   issue: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
+  states: PropTypes.array.isRequired,
 };
 
 export default Issue;
