@@ -28,21 +28,12 @@ const App = () => {
   }`;
 
   const ISSUES = `query issues($after: String) {
-    issues(
-      first: 100
-      after: $after
-      filter: {
-        or: [
-          { assignee: { isMe: { eq: true } } }
-          { parent: { assignee: { isMe: { eq: true } } } }
-          { parent: { parent: { assignee: { isMe: { eq: true } } } } }
-        ]
-      }
-    ) {
+    issues(first: 100 after: $after) {
       pageInfo { hasNextPage endCursor }
       nodes {
         id
         title
+        assignee { isMe }
         team { id }
         parent { id }
       }

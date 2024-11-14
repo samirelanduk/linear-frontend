@@ -1,11 +1,23 @@
 import PropTypes from "prop-types";
 import { ClipLoader } from "react-spinners";
+import Issue from "./Issue";
 
 const Team = props => {
 
   const { team, organization } = props;
 
-  const issues = Object.values(organization.issues).filter(issue => issue.team.id === team.id);
+  const issuesById = Object.values(organization.issues).filter(issue => issue.team.id === team.id).reduce((acc, issue) => {
+    acc[issue.id] = issue;
+    return acc;
+  }, {});
+  for (const issue of Object.values(issuesById)) {
+    issue.children = Object.values(issuesById).filter(child => child.parent?.id === issue.id);
+  }
+  for (const issue of Object.values(issuesById)) {
+    if (issue.parent !== null) issue.parent = issuesById[issue.parent.id];
+  }
+
+  const parentIssues = Object.values(issuesById).filter(issue => issue.parent === null);
 
   return (
     <div
@@ -14,7 +26,7 @@ const Team = props => {
     >
       <div
         style={{borderColor: `${team.color}80`}}
-        className="px-2 py-0.5 border-b-2 text-lg font-semibold text-slate-700"
+        className="px-4 py-0.5 border-b-2 text-lg font-semibold text-slate-700"
       >
         {team.name}
       </div>
@@ -23,12 +35,8 @@ const Team = props => {
           <ClipLoader color={team.color} size={48} cssOverride={{borderWidth: "4px"}} speedMultiplier={1.2} />
         </div>
       )}
-      <div className="px-2 py-1 text-sm max-h-64 overflow-y-auto">
-        {issues.map(issue => (
-          <div key={issue.id}>
-            {issue.title}
-          </div> 
-        ))}
+      <div className="px-4 py-1 text-sm max-h-64 overflow-y-auto">
+        {parentIssues.map(issue => <Issue key={issue.id} issue={issue} />)}
       </div>
     </div>
   );
