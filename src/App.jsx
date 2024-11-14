@@ -33,6 +33,7 @@ const App = () => {
       nodes {
         id
         title
+        dueDate
         assignee { isMe }
         team { id }
         parent { id }

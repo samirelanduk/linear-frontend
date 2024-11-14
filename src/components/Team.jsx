@@ -6,7 +6,16 @@ const Team = props => {
 
   const { team, organization } = props;
 
-  const issuesById = Object.values(organization.issues).filter(issue => issue.team.id === team.id).reduce((acc, issue) => {
+  const issues = Object.values(organization.issues).filter(issue => issue.team.id === team.id);
+
+  issues.sort((a, b) => {
+    if (a.dueDate === null && b.dueDate === null) return 0;
+    if (a.dueDate === null) return 1;
+    if (b.dueDate === null) return -1;
+    return new Date(a.dueDate) - new Date(b.dueDate);
+  });
+
+  const issuesById = issues.reduce((acc, issue) => {
     acc[issue.id] = issue;
     return acc;
   }, {});
