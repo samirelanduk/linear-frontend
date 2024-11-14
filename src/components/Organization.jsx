@@ -7,6 +7,9 @@ const Organization = props => {
 
   const { name, organization, states } = props;
 
+  const teams = Object.values(organization.teams);
+  teams.sort((a, b) => b.issueCount - a.issueCount);
+
   return (
     <div className="w-full">
       <div className="ml-10">
@@ -16,7 +19,7 @@ const Organization = props => {
       {!organization.teamsLoading && (
         <div className="flex overflow-auto gap-10">
           <div className="w-0" />
-          {Object.values(organization.teams).map(team => <Team key={team.id} team={team} organization={organization} states={states} />)}
+          {teams.map(team => <Team key={team.id} team={team} organization={organization} states={states} />)}
           <div className="w-0" />
         </div>
       )}

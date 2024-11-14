@@ -22,10 +22,18 @@ const App = () => {
   const [states, setStates] = useState(["unstarted", "started"]);
 
   const TEAMS = `{
-    teams(first: 100) {
+    teams(first: 50) {
       nodes {
         id name color
         members(filter: { isMe: { eq: true } }) { nodes { id } }
+        issues(filter: {
+          state: {type: {in: ["started", "unstarted"]}}
+          or: [
+            {assignee: {isMe: {eq: true}}}
+            {parent: {assignee: {isMe: {eq: true}}}}
+            {parent: {parent: {assignee: {isMe: {eq: true}}}}}
+          ]
+        }) { nodes { id } }
       }
     }
   }`;
@@ -45,6 +53,7 @@ const App = () => {
       nodes {
         id
         title
+        createdAt
         dueDate
         sortOrder
         subIssueSortOrder
@@ -79,6 +88,8 @@ const App = () => {
           currentOrgState.teams = json.data.teams.nodes.reduce((acc, team) => {
             if (team.members.nodes.length === 0) return acc;
             delete team.members
+            team.issueCount = team.issues.nodes.length;
+            delete team.issues;
             acc[team.id] = team;
             return acc;
           }, {});

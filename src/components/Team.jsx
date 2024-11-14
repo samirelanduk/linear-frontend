@@ -14,11 +14,8 @@ const Team = props => {
     return acc;
   }, {});
 
-  // Sort issues by sort order
-  issues.sort((a, b) => a.sortOrder - b.sortOrder);
-
-  // Sort issues by sub-issue sort order
-  issues.sort((a, b) => a.subIssueSortOrder - b.subIssueSortOrder);
+  // Sort issues by creation
+  issues.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
   // Sort issues by project milestone
   issues.sort((a, b) => {
@@ -37,7 +34,7 @@ const Team = props => {
   });
 
   // Sort issues by state
-  const stateOrder = ["backlog", "unstarted", "started", "completed", "canceled"];
+  const stateOrder = ["started", "unstarted", "backlog", "completed", "canceled"];
   issues.sort((a, b) => stateOrder.indexOf(a.state.type) - stateOrder.indexOf(b.state.type));
 
   // Sort issues by due date
