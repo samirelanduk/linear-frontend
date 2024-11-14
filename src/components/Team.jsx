@@ -6,6 +6,20 @@ const Team = props => {
 
   const { team, organization, states } = props;
 
+  const createIssuesById = issues => {
+    const issuesById = issues.reduce((acc, issue) => {
+      acc[issue.id] = issue;
+      return acc;
+    }, {});
+    for (const issue of Object.values(issuesById)) {
+      issue.children = Object.values(issuesById).filter(child => child.parent?.id === issue.id);
+    }
+    for (const issue of Object.values(issuesById)) {
+      if (issue.parent !== null) issue.parent = issuesById[issue.parent.id];
+    }
+    return issuesById;
+  }
+
   const issues = Object.values(organization.issues).filter(issue => issue.team.id === team.id);
   const milestonesById = Object.values(organization.projects).reduce((acc, project) => {
     for (const milestone of project.milestones) {
@@ -13,6 +27,28 @@ const Team = props => {
     }
     return acc;
   }, {});
+
+  // Assign parents and children
+  let issuesById = createIssuesById(issues);
+
+  // Get subtask due dates
+  const getSubtaskDueDate = task => {
+    let subtaskDueDate = task.dueDate;
+    for (const subtask of task.children) {
+      if (subtask.dueDate && !subtaskDueDate) subtaskDueDate = subtask.dueDate;
+      if (subtask.dueDate !== null && new Date(subtask.dueDate) < new Date(subtaskDueDate)) {
+        subtaskDueDate = subtask.dueDate;
+      }
+      const fromSubtasks = getSubtaskDueDate(subtask);
+      if (fromSubtasks !== null && new Date(fromSubtasks) < new Date(subtaskDueDate)) {
+        subtaskDueDate = fromSubtasks;
+      }
+    }
+    return subtaskDueDate;
+  };
+  for (const task of Object.values(issuesById)) {
+    task.subtaskDueDate = getSubtaskDueDate(task);
+  }
 
   // Sort issues by creation
   issues.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
@@ -39,23 +75,16 @@ const Team = props => {
 
   // Sort issues by due date
   issues.sort((a, b) => {
-    if (a.dueDate === null && b.dueDate === null) return 0;
-    if (a.dueDate === null) return 1;
-    if (b.dueDate === null) return -1;
-    return new Date(a.dueDate) - new Date(b.dueDate);
+    const aDueDate = a.subtaskDueDate || a.dueDate;
+    const bDueDate = b.subtaskDueDate || b.dueDate;
+    if (aDueDate === null && bDueDate === null) return 0;
+    if (aDueDate === null) return 1;
+    if (bDueDate === null) return -1;
+    return new Date(aDueDate) - new Date(bDueDate);
   });
 
-  const issuesById = issues.reduce((acc, issue) => {
-    acc[issue.id] = issue;
-    return acc;
-  }, {});
-  for (const issue of Object.values(issuesById)) {
-    issue.children = Object.values(issuesById).filter(child => child.parent?.id === issue.id);
-  }
-  for (const issue of Object.values(issuesById)) {
-    if (issue.parent !== null) issue.parent = issuesById[issue.parent.id];
-  }
-
+  
+  issuesById = createIssuesById(issues);
   const parentIssues = Object.values(issuesById).filter(issue => issue.parent === null && states.includes(issue.state.type));
 
   return (

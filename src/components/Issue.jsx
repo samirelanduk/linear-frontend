@@ -20,10 +20,13 @@ const Issue = props => {
 
   const soonThreshold = 1000 * 60 * 60 * 24 * 5;
   const dueDate = issue.dueDate && new Date(issue.dueDate);
-  const fromNow = dueDate && dueDate.getTime() - Date.now();
-  const overdue = dueDate && fromNow < 0;
-  const dueSoon = dueDate && fromNow < soonThreshold;
-  const dueLater = dueDate && fromNow >= soonThreshold;
+  const subtaskDueDate = issue.subtaskDueDate && new Date(issue.subtaskDueDate);
+  const dueDateToUse = !dueDate || (subtaskDueDate && subtaskDueDate < dueDate) ? subtaskDueDate : dueDate;
+  const fromNow = dueDateToUse && dueDateToUse.getTime() - Date.now();
+  const overdue = dueDateToUse && fromNow < 0;
+  const dueSoon = dueDateToUse && fromNow < soonThreshold;
+  const dueLater = dueDateToUse && fromNow >= soonThreshold;
+  const isSubtaskDueDate = dueDateToUse && dueDateToUse !== dueDate;
 
   const formatDate = date => {
     const dt = new Date(date);
@@ -62,10 +65,10 @@ const Issue = props => {
             <TriangleIcon className={`w-full relative bottom-1 h-auto fill-indigo-200 opacity-50 hover:opacity-80 cursor-pointer transition-[transform] ${collapsed ? "-rotate-90" : "rotate-0"}`} />
           )}
         </div>
-        {issue.dueDate && (
-          <div className={`text-2xs w-22 flex gap-0.5 -mt-px ${overdue ? "text-red-500" : dueSoon ? "text-yellow-500" : dueLater ? "text-green-500" : ""} ${isMe ? "" : "opacity-50"}`}>
+        {dueDateToUse && (
+          <div className={`text-2xs w-22 flex gap-0.5 -mt-px ${isSubtaskDueDate ? "italic opacity-70" : ""} ${overdue ? "text-red-500" : dueSoon ? "text-yellow-500" : dueLater ? "text-green-500" : ""} ${isMe ? "" : "opacity-50"}`}>
             <CalendarIcon className={`w-3 ${overdue ? "fill-red-500" : dueSoon ? "fill-yellow-500" : dueLater ? "fill-green-500" : ""}`} />
-            {formatDate(issue.dueDate)}
+            {formatDate(dueDateToUse)}
           </div> 
         )}
         {project && (

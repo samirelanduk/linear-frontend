@@ -48,7 +48,9 @@ const App = () => {
   }`;
 
   const ISSUES = `query issues($after: String) {
-    issues(first: 100 after: $after) {
+    issues(first: 100 after: $after filter: {
+      state: {type: {in: ["started", "unstarted"]}}
+    }) {
       pageInfo { hasNextPage endCursor }
       nodes {
         id
