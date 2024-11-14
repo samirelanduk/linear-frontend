@@ -1,12 +1,17 @@
-import React from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import CalendarIcon from "../assets/calendar.svg?react";
+import TriangleIcon from "../assets/triangle.svg?react";
 
 const Issue = props => {
 
   const { issue, organization } = props;
 
+  const [tasksCollapsed, setTasksCollapsed] = useState(null);
+
   const isMe = issue.assignee?.isMe;
+
+  const collapsed = tasksCollapsed === null ? isMe : tasksCollapsed;
 
   const isOther = issue => !issue.assignee?.isMe && issue.children.every(child => isOther(child));
   const other = isOther(issue);
@@ -49,7 +54,12 @@ const Issue = props => {
         <div className={`size-4 border-2 rounded-full flex-shrink-0 ${stateColor}`} />
         <div>{issue.title}</div>
       </div>
-      <div className="flex gap-2 items-center mt-1 -ml-0.5 pl-6">
+      <div className="flex gap-2 items-center mt-1">
+        <div className="w-4 h-2 -mr-0.5" onClick={() => setTasksCollapsed(!collapsed)}>
+          {issue.children.length > 0 && (
+            <TriangleIcon className={`w-full bg-yellow-5 relative bottom-1 h-auto fill-indigo-200 opacity-50 hover:opacity-80 cursor-pointer transition-[transform] ${collapsed ? "-rotate-90" : "rotate-0"}`} />
+          )}
+        </div>
         {issue.dueDate && (
           <div className={`text-2xs flex gap-0.5 -mt-px ${overdue ? "text-red-500" : dueSoon ? "text-yellow-500" : dueLater ? "text-green-500" : ""} ${isMe ? "" : "opacity-50"}`}>
             <CalendarIcon className={`w-3 ${overdue ? "fill-red-500" : dueSoon ? "fill-yellow-500" : dueLater ? "fill-green-500" : ""}`} />
@@ -63,8 +73,8 @@ const Issue = props => {
           </div> 
         )}
       </div>
-      {issue.children.length > 0 && (
-        <div className="flex flex-col gap-1 mt-2">
+      {issue.children.length > 0 && !collapsed && (
+        <div className="flex flex-col gap-2 mt-2">
           {issue.children.map(child => (
             <Issue key={child.id} issue={child} organization={organization} className="ml-6" />
           ))}

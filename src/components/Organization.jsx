@@ -10,7 +10,7 @@ const Organization = props => {
   return (
     <div className="w-full">
       <div className="ml-10">
-        <h2 className="text-4xl font-semibold mb-4">{name}</h2>
+        <h2 className="text-4xl font-semibold mb-6">{name}</h2>
         <BarLoader color={colors.slate[300]} height={16} width={300} loading={organization.teamsLoading} />
       </div>
       {!organization.teamsLoading && (
