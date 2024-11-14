@@ -59,7 +59,7 @@ const Issue = props => {
       <div className="flex gap-2 items-center mt-1">
         <div className="w-4 h-2 -mr-0.5" onClick={() => setTasksCollapsed(!collapsed)}>
           {subtasks.length > 0 && (
-            <TriangleIcon className={`w-full bg-yellow-5 relative bottom-1 h-auto fill-indigo-200 opacity-50 hover:opacity-80 cursor-pointer transition-[transform] ${collapsed ? "-rotate-90" : "rotate-0"}`} />
+            <TriangleIcon className={`w-full relative bottom-1 h-auto fill-indigo-200 opacity-50 hover:opacity-80 cursor-pointer transition-[transform] ${collapsed ? "-rotate-90" : "rotate-0"}`} />
           )}
         </div>
         {issue.dueDate && (
