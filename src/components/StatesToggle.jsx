@@ -24,8 +24,6 @@ const StatesToggle = props => {
     {value: "backlog", label: "Backlog"},
     {value: "unstarted", label: "Unstarted"},
     {value: "started", label: "Started"},
-    {value: "completed", label: "Completed"},
-    {value: "canceled", label: "Canceled"},
   ]
 
   return (
