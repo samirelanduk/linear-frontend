@@ -16,7 +16,7 @@ const Organization = props => {
       {!organization.teamsLoading && (
         <div className="flex overflow-auto gap-10">
           <div className="w-0" />
-          {Object.values(organization.teams).map(team => <Team key={team.id} team={team} />)}
+          {Object.values(organization.teams).map(team => <Team key={team.id} team={team} organization={organization} />)}
           <div className="w-0" />
         </div>
       )}

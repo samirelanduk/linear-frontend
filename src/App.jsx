@@ -10,8 +10,10 @@ const App = () => {
     acc[organization.name] = {
       projectsLoading: true,
       teamsLoading: true,
+      issuesLoading: true,
       projects: {},
       teams: {},
+      issues: {},
     };
     return acc;
   }, {}));
@@ -25,10 +27,33 @@ const App = () => {
     }
   }`;
 
+  const ISSUES = `query issues($after: String) {
+    issues(
+      first: 100
+      after: $after
+      filter: {
+        or: [
+          { assignee: { isMe: { eq: true } } }
+          { parent: { assignee: { isMe: { eq: true } } } }
+          { parent: { parent: { assignee: { isMe: { eq: true } } } } }
+        ]
+      }
+    ) {
+      pageInfo { hasNextPage endCursor }
+      nodes {
+        id
+        title
+        team { id }
+        parent { id }
+      }
+    }
+  }`
+
   useEffect(() => {
     const f = async () => {
       for (const organization of organizations) {
-        const resp = await fetch("https://api.linear.app/graphql", {
+        // Get teams
+        let resp = await fetch("https://api.linear.app/graphql", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -36,7 +61,9 @@ const App = () => {
           },
           body: JSON.stringify({query: TEAMS, variables: {}})
         });
-        const json = await resp.json();
+        let json = await resp.json();
+
+        // Update teams in state
         setData(prev => {
           const currentOrgState = prev[organization.name];
           currentOrgState.teamsLoading = false;
@@ -46,6 +73,36 @@ const App = () => {
             acc[team.id] = team;
             return acc;
           }, {});
+          return {
+            ...prev,
+            [organization.name]: currentOrgState
+          };
+        });
+
+        // Get issues
+        let remainingIssues = true;
+        const issues = {};
+        let after = null;
+        while (remainingIssues) {
+          resp = await fetch("https://api.linear.app/graphql", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": organization.token
+            },
+            body: JSON.stringify({query: ISSUES, variables: {after}})
+          });
+          json = await resp.json();
+          for (const issue of json.data.issues.nodes) {
+            issues[issue.id] = issue;
+          }
+          after = json.data.issues.pageInfo.endCursor;
+          remainingIssues = json.data.issues.pageInfo.hasNextPage;
+        }
+        setData(prev => {
+          const currentOrgState = prev[organization.name];
+          currentOrgState.issuesLoading = false;
+          currentOrgState.issues = issues;
           return {
             ...prev,
             [organization.name]: currentOrgState
