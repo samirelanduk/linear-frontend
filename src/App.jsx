@@ -27,6 +27,15 @@ const App = () => {
     }
   }`;
 
+  const PROJECTS = `{
+    projects(first: 50) {
+      nodes {
+        id name startDate targetDate
+        projectMilestones { nodes { id name targetDate } }
+      }
+    }
+  }`;
+
   const ISSUES = `query issues($after: String) {
     issues(first: 100 after: $after) {
       pageInfo { hasNextPage endCursor }
@@ -38,6 +47,8 @@ const App = () => {
         team { id }
         parent { id }
         state { name type }
+        project { id }
+        projectMilestone { id }
       }
     }
   }`
@@ -64,6 +75,32 @@ const App = () => {
             if (team.members.nodes.length === 0) return acc;
             delete team.members
             acc[team.id] = team;
+            return acc;
+          }, {});
+          return {
+            ...prev,
+            [organization.name]: currentOrgState
+          };
+        });
+
+        // Get projects
+        resp = await fetch("https://api.linear.app/graphql", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": organization.token
+          },
+          body: JSON.stringify({query: PROJECTS, variables: {}})
+        });
+        json = await resp.json();
+
+        // Update projects in state
+        setData(prev => {
+          const currentOrgState = prev[organization.name];
+          currentOrgState.projectsLoading = false;
+          currentOrgState.projects = json.data.projects.nodes.reduce((acc, project) => {
+            acc[project.id] = {...project, milestones: project.projectMilestones.nodes};
+            delete acc[project.id].projectMilestones;
             return acc;
           }, {});
           return {

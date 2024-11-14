@@ -45,8 +45,8 @@ const Team = props => {
         </div>
       )}
       {!organization.issuesLoading && (
-        <div className="px-4 pt-2.5 pb-1 text-sm max-h-64 overflow-y-auto flex flex-col gap-1">
-          {parentIssues.map(issue => <Issue key={issue.id} issue={issue} />)}
+        <div className="px-4 py-3 pr-6 text-sm max-h-96 overflow-y-auto flex flex-col gap-3">
+          {parentIssues.map(issue => <Issue key={issue.id} issue={issue} organization={organization} />)}
         </div>
       )}
     </div>
