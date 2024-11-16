@@ -65,6 +65,7 @@ const App = () => {
         state { name type }
         project { id }
         projectMilestone { id }
+        labels { nodes { id name color } }
       }
     }
   }`
@@ -142,6 +143,7 @@ const App = () => {
           });
           json = await resp.json();
           for (const issue of json.data.issues.nodes) {
+            issue.labels = issue.labels.nodes;
             issues[issue.id] = issue;
           }
           after = json.data.issues.pageInfo.endCursor;

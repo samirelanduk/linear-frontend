@@ -77,6 +77,15 @@ const Issue = props => {
             {milestone && ` - ${milestone.name}`}
           </div> 
         )}
+        {issue.labels.length > 0 && (
+          <div className="text-2xs flex gap-1.5">
+            {issue.labels.map(label => (
+              <div key={label.id} className="leading-4 -mt-1 px-1.5 font-medium rounded" style={{background: `${label.color}80`}}>
+                {label.name}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       {subtasks.length > 0 && !collapsed && (
         <div className="flex flex-col gap-2 mt-2">
