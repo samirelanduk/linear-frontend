@@ -1,23 +1,12 @@
 import { useEffect, useState } from "react";
 import Organization from "./components/Organization";
-import { loadTokens } from "./tokens";
 import StatesToggle from "./components/StatesToggle";
+import { ClipLoader } from "react-spinners";
+import colors from "tailwindcss/colors";
 
 const App = () => {
 
-  const organizations = loadTokens();
-
-  const [data, setData] = useState(organizations.reduce((acc, organization) => {
-    acc[organization.name] = {
-      projectsLoading: true,
-      teamsLoading: true,
-      issuesLoading: true,
-      projects: {},
-      teams: {},
-      issues: {},
-    };
-    return acc;
-  }, {}));
+  const [data, setData] = useState(null);
 
   const [states, setStates] = useState(["unstarted", "started"]);
 
@@ -72,9 +61,24 @@ const App = () => {
 
   useEffect(() => {
     const f = async () => {
-      for (const organization of organizations) {
+      let resp = await fetch("http://localhost:8023/tokens");
+      let json = await resp.json();
+      console.log(json);
+      setData(json.reduce((acc, organization) => {
+        acc[organization.name] = {
+          projectsLoading: true,
+          teamsLoading: true,
+          issuesLoading: true,
+          projects: {},
+          teams: {},
+          issues: {},
+        };
+        return acc;
+      }, {}))
+
+      for (const organization of json) {
         // Get teams
-        let resp = await fetch("https://api.linear.app/graphql", {
+        resp = await fetch("https://api.linear.app/graphql", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -82,7 +86,7 @@ const App = () => {
           },
           body: JSON.stringify({query: TEAMS, variables: {}})
         });
-        let json = await resp.json();
+        json = await resp.json();
 
         // Update teams in state
         setData(prev => {
@@ -162,6 +166,14 @@ const App = () => {
     }
     f();
   }, []);
+
+  if (!data) {
+    return (
+      <div className="flex justify-center items-center bg-slate-700 text-white min-h-svh">
+        <ClipLoader color={colors.slate[400]} size={200} cssOverride={{"borderWidth": "20px"}} speedMultiplier={1.25} />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-10 py-8 bg-slate-700 text-white min-h-svh">

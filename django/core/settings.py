@@ -11,6 +11,7 @@ env = environ.Env(
     DB_URL=(str, "sqlite:///db.sqlite3"),
     CORS_ALLOWED_ORIGINS=(list, ["http://localhost"]),
 )
+env.read_env(os.path.join(PROJECT_DIR, ".env"))
 
 ALLOWED_HOSTS = ["*"]
 
@@ -44,3 +45,12 @@ DATABASES = {
 }
 
 CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS")
+
+TOKENS = []
+for n in range(1, 10):
+    try:
+        name = env(f"WORKSPACE{n}_NAME")
+        token = env(f"WORKSPACE{n}_TOKEN")
+        TOKENS.append({"name": name, "token": token})
+    except:
+        pass
