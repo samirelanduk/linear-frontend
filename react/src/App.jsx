@@ -38,7 +38,7 @@ const App = () => {
 
   const ISSUES = `query issues($after: String) {
     issues(first: 100 after: $after filter: {
-      state: {type: {in: ["started", "unstarted"]}}
+      state: {type: {in: ["backlog", "started", "unstarted"]}}
     }) {
       pageInfo { hasNextPage endCursor }
       nodes {
@@ -63,7 +63,6 @@ const App = () => {
     const f = async () => {
       let resp = await fetch("http://localhost:8023/tokens");
       let json = await resp.json();
-      console.log(json);
       setData(json.reduce((acc, organization) => {
         acc[organization.name] = {
           projectsLoading: true,

@@ -18,10 +18,29 @@ const Issue = props => {
 
   if (other) return null;
 
+  const project = issue.project && organization.projects[issue.project.id];
+  const milestonesById = project && project.milestones.reduce((acc, milestone) => {
+    acc[milestone.id] = milestone;
+    return acc;
+  }, {});
+  const milestone = issue.projectMilestone && milestonesById[issue.projectMilestone.id];
+
   const soonThreshold = 1000 * 60 * 60 * 24 * 5;
-  const dueDate = issue.dueDate && new Date(issue.dueDate);
+
+  let dueDate = null;
+  if (issue.dueDate) dueDate = new Date(issue.dueDate);
+  if (milestone && milestone.targetDate) {
+    const milestoneDueDate = new Date(milestone.targetDate);
+    if (!dueDate || milestoneDueDate < dueDate) dueDate = milestoneDueDate;
+  }
+  if (project && project.targetDate) {
+    const projectDueDate = new Date(project.targetDate);
+    if (!dueDate || projectDueDate < dueDate) dueDate = projectDueDate;
+  }
+
   const subtaskDueDate = issue.subtaskDueDate && new Date(issue.subtaskDueDate);
-  const dueDateToUse = !dueDate || (subtaskDueDate && subtaskDueDate < dueDate) ? subtaskDueDate : dueDate;
+  let dueDateToUse = dueDate;
+  if (subtaskDueDate && subtaskDueDate < dueDateToUse) dueDateToUse = subtaskDueDate;
   const fromNow = dueDateToUse && dueDateToUse.getTime() - Date.now();
   const overdue = dueDateToUse && fromNow < 0;
   const dueSoon = dueDateToUse && fromNow < soonThreshold;
@@ -44,12 +63,6 @@ const Issue = props => {
     "canceled": "border-red-300",
   }[issue.state.type];
 
-  const project = issue.project && organization.projects[issue.project.id];
-  const milestonesById = project && project.milestones.reduce((acc, milestone) => {
-    acc[milestone.id] = milestone;
-    return acc;
-  }, {});
-  const milestone = issue.projectMilestone && milestonesById[issue.projectMilestone.id];
 
   const subtasks = issue.children.filter(child => states.includes(child.state.type));
 
