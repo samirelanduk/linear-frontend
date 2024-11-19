@@ -93,6 +93,7 @@ const App = () => {
           currentOrgState.teamsLoading = false;
           currentOrgState.teams = json.data.teams.nodes.reduce((acc, team) => {
             if (team.members.nodes.length === 0) return acc;
+            if (team.issues.nodes.length === 0) return acc;
             delete team.members
             team.issueCount = team.issues.nodes.length;
             delete team.issues;
