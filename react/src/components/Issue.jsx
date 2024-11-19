@@ -25,7 +25,7 @@ const Issue = props => {
   }, {});
   const milestone = issue.projectMilestone && milestonesById[issue.projectMilestone.id];
 
-  const soonThreshold = 1000 * 60 * 60 * 24 * 5;
+  const soonThreshold = 5;
 
   let dueDate = null;
   if (issue.dueDate) dueDate = new Date(issue.dueDate);
@@ -41,10 +41,10 @@ const Issue = props => {
   const subtaskDueDate = issue.subtaskDueDate && new Date(issue.subtaskDueDate);
   let dueDateToUse = dueDate;
   if (subtaskDueDate && subtaskDueDate < dueDateToUse) dueDateToUse = subtaskDueDate;
-  const fromNow = dueDateToUse && dueDateToUse.getTime() - Date.now();
-  const overdue = dueDateToUse && fromNow < 0;
-  const dueSoon = dueDateToUse && fromNow < soonThreshold;
-  const dueLater = dueDateToUse && fromNow >= soonThreshold;
+  const daysFromNow = Math.round((dueDateToUse && dueDateToUse.getTime() - Date.now()) / 1000 / 60 / 60 / 24);
+  const overdue = dueDateToUse && daysFromNow < 0;
+  const dueSoon = dueDateToUse && daysFromNow < soonThreshold;
+  const dueLater = dueDateToUse && daysFromNow >= soonThreshold;
   const isSubtaskDueDate = dueDateToUse && dueDateToUse !== dueDate;
 
   const formatDate = date => {
