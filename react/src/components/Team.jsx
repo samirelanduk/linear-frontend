@@ -27,6 +27,10 @@ const Team = props => {
     }
     return acc;
   }, {});
+  const projectsById = Object.values(organization.projects).reduce((acc, project) => {
+    acc[project.id] = project;
+    return acc;
+  }, {});
 
   // Assign parents and children
   let issuesById = createIssuesById(issues);
@@ -75,8 +79,19 @@ const Team = props => {
 
   // Sort issues by due date
   issues.sort((a, b) => {
-    const aDueDate = a.subtaskDueDate || a.dueDate;
-    const bDueDate = b.subtaskDueDate || b.dueDate;
+    const milestoneA = a.projectMilestone && milestonesById[a.projectMilestone.id];
+    const projectA = a.project && projectsById[a.project.id];
+    const dueDatesA = [milestoneA?.targetDate, projectA?.targetDate, a.dueDate, a.subtaskDueDate];
+    dueDatesA.sort((a, b) => a === null ? 1 : b === null ? -1 : new Date(a) - new Date(b));
+    const aDueDate = dueDatesA[0];
+
+    const milestoneB = b.projectMilestone && milestonesById[b.projectMilestone.id];
+    const projectB = b.project && projectsById[b.project.id];
+    const dueDatesB = [milestoneB?.targetDate, projectB?.targetDate, b.dueDate, b.subtaskDueDate];
+    dueDatesB.sort((a, b) => a === null ? 1 : b === null ? -1 : new Date(a) - new Date(b));
+    const bDueDate = dueDatesB[0];
+
+
     if (aDueDate === null && bDueDate === null) return 0;
     if (aDueDate === null) return 1;
     if (bDueDate === null) return -1;

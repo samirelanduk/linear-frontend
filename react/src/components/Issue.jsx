@@ -41,7 +41,18 @@ const Issue = props => {
   const subtaskDueDate = issue.subtaskDueDate && new Date(issue.subtaskDueDate);
   let dueDateToUse = dueDate;
   if (subtaskDueDate && subtaskDueDate < dueDateToUse) dueDateToUse = subtaskDueDate;
-  const daysFromNow = Math.round((dueDateToUse && dueDateToUse.getTime() - Date.now()) / 1000 / 60 / 60 / 24);
+
+  // Ensure midnight
+  let dueDateToUseObj = dueDateToUse && new Date(dueDateToUse);
+  if (dueDateToUseObj) {
+    dueDateToUseObj.setHours(0, 0, 0, 0);
+    dueDateToUse = dueDateToUseObj;
+  }
+  let now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+
+  const daysFromNow = Math.round((dueDateToUseObj && dueDateToUseObj.getTime() - now.getTime()) / 1000 / 60 / 60 / 24);
   const overdue = dueDateToUse && daysFromNow < 0;
   const dueSoon = dueDateToUse && daysFromNow < soonThreshold;
   const dueLater = dueDateToUse && daysFromNow >= soonThreshold;
