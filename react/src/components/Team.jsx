@@ -67,10 +67,12 @@ const Team = props => {
 
   // Sort issues by project
   issues.sort((a, b) => {
-    if (a.project === null && b.project === null) return 0;
-    if (a.project === null) return 1;
-    if (b.project === null) return -1;
-    return a.project.id.localeCompare(b.project.id);
+    const projectA = a.project && projectsById[a.project.id];
+    const projectB = b.project && projectsById[b.project.id];
+    if (projectA === null && projectB === null) return 0;
+    if (projectA === null) return 1;
+    if (projectB === null) return -1;
+    return new Date(projectA.sortOrder) - new Date(projectB.sortOrder);
   });
 
   // Sort issues by state

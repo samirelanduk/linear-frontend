@@ -24,39 +24,24 @@ const Issue = props => {
     return acc;
   }, {});
   const milestone = issue.projectMilestone && milestonesById[issue.projectMilestone.id];
+  
+  const dueDateObj = issue.dueDate && new Date(issue.dueDate);
+  const subtaskDueDateObj = issue.subtaskDueDate && new Date(issue.subtaskDueDate);
+  const milestoneDueDateObj = milestone && milestone.targetDate && new Date(milestone.targetDate);
+  const projectDueDateObj = project && project.targetDate && new Date(project.targetDate);
+  const allDueDates = [dueDateObj, subtaskDueDateObj, milestoneDueDateObj, projectDueDateObj].filter(Boolean);
+  allDueDates.sort((a, b) => a - b);
+  
+  const dueDateToUse = allDueDates[0];
+  const isSubtaskDueDate = subtaskDueDateObj === dueDateToUse;
 
-  const soonThreshold = 5;
-
-  let dueDate = null;
-  if (issue.dueDate) dueDate = new Date(issue.dueDate);
-  if (milestone && milestone.targetDate) {
-    const milestoneDueDate = new Date(milestone.targetDate);
-    if (!dueDate || milestoneDueDate < dueDate) dueDate = milestoneDueDate;
-  }
-  if (project && project.targetDate) {
-    const projectDueDate = new Date(project.targetDate);
-    if (!dueDate || projectDueDate < dueDate) dueDate = projectDueDate;
-  }
-
-  const subtaskDueDate = issue.subtaskDueDate && new Date(issue.subtaskDueDate);
-  let dueDateToUse = dueDate;
-  if (subtaskDueDate && subtaskDueDate < dueDateToUse) dueDateToUse = subtaskDueDate;
-
-  // Ensure midnight
-  let dueDateToUseObj = dueDateToUse && new Date(dueDateToUse);
-  if (dueDateToUseObj) {
-    dueDateToUseObj.setHours(0, 0, 0, 0);
-    dueDateToUse = dueDateToUseObj;
-  }
-  let now = new Date();
+  const now = new Date();
   now.setHours(0, 0, 0, 0);
-
-
-  const daysFromNow = Math.round((dueDateToUseObj && dueDateToUseObj.getTime() - now.getTime()) / 1000 / 60 / 60 / 24);
+  const soonThreshold = 5;
+  const daysFromNow = Math.round((dueDateToUse && dueDateToUse.getTime() - now.getTime()) / 1000 / 60 / 60 / 24);
   const overdue = dueDateToUse && daysFromNow < 0;
   const dueSoon = dueDateToUse && daysFromNow < soonThreshold;
   const dueLater = dueDateToUse && daysFromNow >= soonThreshold;
-  const isSubtaskDueDate = dueDateToUse && dueDateToUse !== dueDate;
 
   const formatDate = date => {
     const dt = new Date(date);

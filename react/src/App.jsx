@@ -30,7 +30,7 @@ const App = () => {
   const PROJECTS = `{
     projects(first: 50) {
       nodes {
-        id name startDate targetDate
+        id name startDate targetDate sortOrder
         projectMilestones { nodes { id name targetDate sortOrder } }
       }
     }
