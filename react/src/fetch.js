@@ -26,6 +26,8 @@ export const initializeData = async (setData) => {
   const json = await resp.json();
   setData(json.reduce((acc, organization) => {
     acc[organization.name] = {
+      name: organization.name,
+      token: organization.token,
       projectsLoading: true,
       teamsLoading: true,
       issuesLoading: true,

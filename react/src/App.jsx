@@ -4,6 +4,7 @@ import StatesToggle from "./components/StatesToggle";
 import { ClipLoader } from "react-spinners";
 import colors from "tailwindcss/colors";
 import { getOrganization, initializeData } from "./fetch";
+import { DataContext } from "./contexts";
 
 const App = () => {
 
@@ -29,12 +30,14 @@ const App = () => {
   }
 
   return (
-    <div className="flex flex-col gap-10 py-8 bg-slate-700 text-white min-h-svh">
-      <StatesToggle states={states} setStates={setStates} className="fixed right-10" />
-      {Object.entries(data).map(([name, organization]) => (
-        <Organization key={name} name={name} organization={organization} states={states} />
-      ))}
-    </div>
+    <DataContext.Provider value={[data, setData]}>
+      <div className="flex flex-col gap-10 py-8 bg-slate-700 text-white min-h-svh">
+        <StatesToggle states={states} setStates={setStates} className="fixed right-10" />
+        {Object.entries(data).map(([name, organization]) => (
+          <Organization key={name} name={name} organization={organization} states={states} />
+        ))}
+      </div>
+    </DataContext.Provider>
   );
 };
 
