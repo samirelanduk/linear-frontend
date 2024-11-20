@@ -28,9 +28,11 @@ export const initializeData = async (setData) => {
     acc[organization.name] = {
       name: organization.name,
       token: organization.token,
+      urlKey: "",
       projectsLoading: true,
       teamsLoading: true,
       issuesLoading: true,
+      notifications: [],
       projects: {},
       teams: {},
       issues: {},
@@ -73,6 +75,8 @@ const getTeamsForOrganization = async (organization, setData) => {
       acc[team.id] = team;
       return acc;
     }, {});
+    currentOrgState.notifications = json.data.notifications.nodes;
+    currentOrgState.urlKey = json.data.organization.urlKey;
     return {...prev, [organization.name]: currentOrgState};
   });
 }

@@ -13,6 +13,8 @@ export const TEAMS = `{
       }) { nodes { id } }
     }
   }
+  organization { urlKey }
+  notifications(first: 20) { nodes { type readAt } }
 }`;
 
 
