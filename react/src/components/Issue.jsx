@@ -81,10 +81,14 @@ const Issue = props => {
           </div> 
         )}
         {project && (
-          <div className="text-2xs text-indigo-200 border border-indigo-200 opacity-50 rounded-md px-1.5">
+          <a
+            href={`https://linear.app/${organization.urlKey}/project/${project.slugId}${milestone ? `?projectMilestoneId=${milestone.id}` : ""}`}
+            target="_blank" rel="noreferrer"
+            className="text-2xs text-indigo-200 border border-indigo-200 opacity-50 rounded-md px-1.5"
+          >
             {project.name}
             {milestone && ` - ${milestone.name}`}
-          </div> 
+          </a> 
         )}
         {issue.labels.length > 0 && (
           <div className="text-2xs flex gap-1.5">
@@ -108,6 +112,7 @@ const Issue = props => {
 };
 
 Issue.propTypes = {
+  className: PropTypes.string,
   issue: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
   states: PropTypes.array.isRequired,

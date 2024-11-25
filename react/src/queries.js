@@ -1,7 +1,7 @@
 export const TEAMS = `{
   teams(first: 50) {
     nodes {
-      id name color
+      id name color key
       members(filter: { isMe: { eq: true } }) { nodes { id } }
       issues(filter: {
         state: {type: {in: ["started", "unstarted"]}}
@@ -21,7 +21,7 @@ export const TEAMS = `{
 export const PROJECTS = `{
   projects(first: 50) {
     nodes {
-      id name startDate targetDate sortOrder
+      id slugId name startDate targetDate sortOrder
       projectMilestones { nodes { id name targetDate sortOrder } }
     }
   }

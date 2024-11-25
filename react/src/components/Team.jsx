@@ -109,12 +109,14 @@ const Team = props => {
       className="max-w-128 min-w-72 flex-shrink-0 border-3 rounded-md"
       style={{borderColor: `${team.color}80`, backgroundColor: `${team.color}08`}}
     >
-      <div
+      <a
+        href={`https://linear.app/${organization.urlKey}/team/${team.key}`}
+        target="_blank" rel="noreferrer"
         style={{borderColor: `${team.color}80`}}
-        className="px-4 py-0.5 border-b-3 text-lg font-semibold"
+        className="block px-4 py-0.5 border-b-3 text-lg font-semibold"
       >
         {team.name}
-      </div>
+      </a>
       {organization.issuesLoading && (
         <div className="flex justify-center items-center py-3">
           <ClipLoader color={team.color} size={48} cssOverride={{borderWidth: "4px"}} speedMultiplier={1.2} />
