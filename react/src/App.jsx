@@ -3,6 +3,7 @@ import { ClipLoader } from "react-spinners";
 import colors from "tailwindcss/colors";
 import { getOrganization, initializeData } from "./fetch";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Nav from "./components/Nav";
 import { DataContext } from "./contexts";
 import HomePage from "./pages/HomePage";
 
@@ -30,6 +31,7 @@ const App = () => {
   return (
     <DataContext.Provider value={[data, setData]}>
       <BrowserRouter>
+        <Nav />
         <Routes>
           <Route path="/" element={<HomePage />} />
         </Routes>
