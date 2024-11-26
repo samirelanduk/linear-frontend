@@ -2,6 +2,10 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import CalendarIcon from "../assets/calendar.svg?react";
 import TriangleIcon from "../assets/triangle.svg?react";
+import { formatDate } from "../utils";
+import ProjectLink from "./ProjectLink";
+import StateIndicator from "./StateIndicator";
+import Labels from "./Labels";
 
 const Issue = props => {
 
@@ -43,29 +47,12 @@ const Issue = props => {
   const dueSoon = dueDateToUse && daysFromNow < soonThreshold;
   const dueLater = dueDateToUse && daysFromNow >= soonThreshold;
 
-  const formatDate = date => {
-    const dt = new Date(date);
-    const isThisYear = dt.getFullYear() === new Date().getFullYear();
-    return new Date(date).toLocaleDateString("en-GB", {
-      weekday: "short", month: "short", day: "numeric", year: isThisYear ? undefined : "numeric"
-    });
-  }
-
-  const stateColor = {
-    "backlog": "border-gray-500",
-    "unstarted": "border-white",
-    "started": "border-orange-500",
-    "completed": "border-green-500 bg-green-600 bg-opacity-60",
-    "canceled": "border-red-300",
-  }[issue.state.type];
-
-
   const subtasks = issue.children.filter(child => states.includes(child.state.type));
 
   return (
     <div className={`${props.className || ""}`}>
       <div className={`py-px flex items-center gap-1.5 ${isMe ? "" : "opacity-20"}`}>
-        <div className={`size-4 border-2 rounded-full flex-shrink-0 ${stateColor}`} />
+        <StateIndicator issue={issue} />
         <div>{issue.title}</div>
       </div>
       <div className="flex gap-2 items-center mt-1">
@@ -80,25 +67,8 @@ const Issue = props => {
             {formatDate(dueDateToUse)}
           </div> 
         )}
-        {project && (
-          <a
-            href={`https://linear.app/${organization.urlKey}/project/${project.slugId}${milestone ? `?projectMilestoneId=${milestone.id}` : ""}`}
-            target="_blank" rel="noreferrer"
-            className="text-2xs text-indigo-200 border border-indigo-200 opacity-50 rounded-md px-1.5"
-          >
-            {project.name}
-            {milestone && ` - ${milestone.name}`}
-          </a> 
-        )}
-        {issue.labels.length > 0 && (
-          <div className="text-2xs flex gap-1.5">
-            {issue.labels.map(label => (
-              <div key={label.id} className="leading-4 -mt-1 px-1.5 font-medium rounded" style={{background: `${label.color}80`}}>
-                {label.name}
-              </div>
-            ))}
-          </div>
-        )}
+        {issue.project && <ProjectLink issue={issue} organizationKey={organization.urlKey} />}
+        {issue.labels.length > 0 && <Labels issue={issue} />}
       </div>
       {subtasks.length > 0 && !collapsed && (
         <div className="flex flex-col gap-2 mt-2">

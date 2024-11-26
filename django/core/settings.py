@@ -51,6 +51,7 @@ for n in range(1, 10):
     try:
         name = env(f"WORKSPACE{n}_NAME")
         token = env(f"WORKSPACE{n}_TOKEN")
-        TOKENS.append({"name": name, "token": token})
+        color = env(f"WORKSPACE{n}_COLOR")
+        TOKENS.append({"name": name, "token": token, "color": color})
     except:
         pass

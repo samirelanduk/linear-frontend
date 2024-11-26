@@ -28,6 +28,7 @@ export const initializeData = async (setData) => {
     acc[organization.name] = {
       name: organization.name,
       token: organization.token,
+      color: organization.color,
       urlKey: "",
       projectsLoading: true,
       teamsLoading: true,

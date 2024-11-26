@@ -1,24 +1,10 @@
-import { useState, useEffect } from "react";
+import { useContext } from "react";
 import PropTypes from "prop-types";
+import { StatesContext } from "../contexts";
 
 const StatesToggle = props => {
 
-  const { states, setStates } = props;
-
-  const [scrollDistance, setScrollDistance] = useState(0);
-  
-  const scale = Math.max(100 - (scrollDistance / 2), 60);
-  const right = Math.max(20, 40 - (scrollDistance / 2));
-  const top = Math.max(20, 30 - (scrollDistance / 2));
-
-  useEffect(() => {
-    const onScroll = () => {
-      setScrollDistance(window.scrollY);
-    }
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
+  const [states, setStates] = useContext(StatesContext);
 
   const options = [
     {value: "backlog", label: "Backlog"},
@@ -28,13 +14,12 @@ const StatesToggle = props => {
 
   return (
     <div
-      className={`flex gap-6 border w-fit py-2 px-3 rounded-lg border-indigo-300 bg-slate-700 z-50 ${props.className || ""}`}
-      style={{scale: `${scale}%`, right, top, transformOrigin: "top right"}}
+      className={`hidden sm:flex gap-4 border w-fit py-2 rounded-lg border-indigo-300 bg-slate-700 z-50 sm:px-2.5 sm:gap-5 md:px-3 md:gap-6 ${props.className || ""}`}
     >
       {options.map(option => (
         <label
           key={option.value}
-          className="inline-flex justify-center items-center gap-1 cursor-pointer"
+          className="inline-flex justify-center items-center gap-1 cursor-pointer text-xs sm:text-sm md:text-base"
           onClick={() => setStates(states.includes(option.value) ? states.filter(state => state !== option.value) : [...states, option.value])}
         >
           <div className="w-4 h-4 p-0.5 rounded border-2 border-indigo-300">
@@ -48,8 +33,7 @@ const StatesToggle = props => {
 };
 
 StatesToggle.propTypes = {
-  states: PropTypes.array.isRequired,
-  setStates: PropTypes.func.isRequired,
+  className: PropTypes.string,
 };
 
 export default StatesToggle;

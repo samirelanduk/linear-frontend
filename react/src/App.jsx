@@ -4,12 +4,14 @@ import colors from "tailwindcss/colors";
 import { getOrganization, initializeData } from "./fetch";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Nav from "./components/Nav";
-import { DataContext } from "./contexts";
+import { DataContext, StatesContext } from "./contexts";
 import HomePage from "./pages/HomePage";
+import DuePage from "./pages/DuePage";
 
 const App = () => {
 
   const [data, setData] = useState(null);
+  const [states, setStates] = useState(["unstarted", "started"]);
 
   useEffect(() => {
     (async () => {
@@ -30,12 +32,15 @@ const App = () => {
 
   return (
     <DataContext.Provider value={[data, setData]}>
-      <BrowserRouter>
-        <Nav />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-        </Routes>
-      </BrowserRouter>
+      <StatesContext.Provider value={[states, setStates]}>
+        <BrowserRouter>
+          <Nav />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/due" element={<DuePage />} />
+          </Routes>
+        </BrowserRouter>
+      </StatesContext.Provider>
     </DataContext.Provider>
   );
 };

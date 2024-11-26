@@ -6,4 +6,8 @@
   body {
     @apply bg-slate-700;
   }
+
+  main {
+    @apply pt-28;
+  }
 }

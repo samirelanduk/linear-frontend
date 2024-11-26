@@ -7,14 +7,15 @@ import SyncIcon from "../assets/sync.svg?react";
 import BellIcon from "../assets/bell.svg?react";
 import Team from "./Team";
 import { getOrganization } from "../fetch";
-import { DataContext } from "../contexts";
+import { DataContext, StatesContext } from "../contexts";
 
 const Organization = props => {
 
-  const { name, organization, states } = props;
+  const { name, organization } = props;
 
   const [collapsed, setCollapsed] = useState(false);
   const [,setData] = useContext(DataContext);
+  const [states] = useContext(StatesContext);
 
   const teams = Object.values(organization.teams);
   teams.sort((a, b) => b.issueCount - a.issueCount);
@@ -71,7 +72,6 @@ const Organization = props => {
 Organization.propTypes = {
   name: PropTypes.string.isRequired,
   organization: PropTypes.object.isRequired,
-  states: PropTypes.array.isRequired,
 };
 
 export default Organization;
