@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
-import Organization from "./components/Organization";
-import StatesToggle from "./components/StatesToggle";
 import { ClipLoader } from "react-spinners";
 import colors from "tailwindcss/colors";
 import { getOrganization, initializeData } from "./fetch";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DataContext } from "./contexts";
+import HomePage from "./pages/HomePage";
 
 const App = () => {
 
   const [data, setData] = useState(null);
-
-  const [states, setStates] = useState(["unstarted", "started"]);
 
   useEffect(() => {
     (async () => {
@@ -31,12 +29,11 @@ const App = () => {
 
   return (
     <DataContext.Provider value={[data, setData]}>
-      <div className="flex flex-col gap-10 py-8 bg-slate-700 text-white min-h-svh">
-        <StatesToggle states={states} setStates={setStates} className="fixed right-10" />
-        {Object.entries(data).map(([name, organization]) => (
-          <Organization key={name} name={name} organization={organization} states={states} />
-        ))}
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+      </BrowserRouter>
     </DataContext.Provider>
   );
 };
