@@ -13,24 +13,31 @@ const DuePage = () => {
   const loading = Object.values(data).some(organization => organization.issuesLoading);
 
   const projectsById = {};
+  const milestonesById = {};
   const issues = [];
 
   for (const organization of Object.values(data)) {
     for (const project of Object.values(organization.projects)) {
       projectsById[project.id] = project;
+      for (const milestone of project.milestones) {
+        milestonesById[milestone.id] = milestone;
+      }
     }
     for (const issue of Object.values(organization.issues)) {
       const annotatedIssue = {...issue};
+      let project; let milestone;
+      if (issue.project?.id) project = projectsById[issue.project.id];
+      if (issue.projectMilestone?.id) milestone = milestonesById[issue.projectMilestone.id];
+      if (milestone && milestone.targetDate && !annotatedIssue.dueDate) {
+        annotatedIssue.dueDate = milestone.targetDate;
+      }
+      if (project && project.targetDate && !annotatedIssue.dueDate) {
+        annotatedIssue.dueDate = project.targetDate;
+      }
       annotatedIssue.organization = organization;
-      if (annotatedIssue.dueDate && states.includes(annotatedIssue.state.type)) {
+      if (annotatedIssue.dueDate && annotatedIssue.assignee?.isMe && states.includes(annotatedIssue.state.type)) {
         issues.push(annotatedIssue);
       }
-    }
-  }
-  const milestonesById = {};
-  for (const project of Object.values(projectsById)) {
-    for (const milestone of project.milestones) {
-      milestonesById[milestone.id] = milestone;
     }
   }
 
