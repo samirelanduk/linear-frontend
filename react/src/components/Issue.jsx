@@ -53,7 +53,11 @@ const Issue = props => {
     <div className={`${props.className || ""}`}>
       <div className={`py-px flex items-center gap-1.5 ${isMe ? "" : "opacity-20"}`}>
         <StateIndicator issue={issue} />
-        <div>{issue.title}</div>
+        <a
+          href={`https://linear.app/${organization.urlKey}/issue/${issue.identifier}`}
+          target="_blank"
+          rel="noreferrer"
+        >{issue.title}</a>
       </div>
       <div className="flex gap-2 items-center mt-1">
         <div className="w-4 h-2 -mr-0.5" onClick={() => setTasksCollapsed(!collapsed)}>

@@ -69,7 +69,14 @@ const DuePage = () => {
               {issues.map(issue => (
                 <div key={issue.id} className="flex gap-2 items-center border-l-4 pl-2 py-1" style={{borderColor: issue.organization.color}}>
                   <StateIndicator issue={issue} />
-                  <div className="-ml-0.5 text-slate-200">{issue.title}</div>
+                  <a
+                    className="-ml-0.5 text-slate-200"
+                    href={`https://linear.app/${issue.organization.urlKey}/issue/${issue.identifier}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {issue.title}
+                  </a>
                   {issue.project && <ProjectLink issue={issue} organizationKey={issue.organization.urlKey} />}
                   {issue.labels.length > 0 && <Labels issue={issue} />}
                 </div>

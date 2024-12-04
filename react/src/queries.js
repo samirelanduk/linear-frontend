@@ -37,6 +37,7 @@ export const ISSUES = `query issues($after: String) {
       id
       title
       createdAt
+      identifier
       dueDate
       sortOrder
       subIssueSortOrder
