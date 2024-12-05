@@ -36,7 +36,7 @@ const Issue = props => {
   const allDueDates = [dueDateObj, subtaskDueDateObj, milestoneDueDateObj, projectDueDateObj].filter(Boolean);
   allDueDates.sort((a, b) => a - b);
   
-  const dueDateToUse = allDueDates[0];
+  const dueDateToUse = new Date(issue.subtaskDueDate || issue.dueDate || issue.milestoneDueDate || issue.projectDueDate)
   const isSubtaskDueDate = subtaskDueDateObj === dueDateToUse;
 
   const now = new Date();

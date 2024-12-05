@@ -81,17 +81,13 @@ const Team = props => {
 
   // Sort issues by due date
   issues.sort((a, b) => {
-    const milestoneA = a.projectMilestone && milestonesById[a.projectMilestone.id];
-    const projectA = a.project && projectsById[a.project.id];
-    const dueDatesA = [milestoneA?.targetDate, projectA?.targetDate, a.dueDate, a.subtaskDueDate];
+    const dueDatesA = [a.subtaskDueDate, a.dueDate, a.milestoneDueDate, a.projectDueDate];
     dueDatesA.sort((a, b) => a === null ? 1 : b === null ? -1 : new Date(a) - new Date(b));
-    const aDueDate = dueDatesA[0];
+    const aDueDate = a.subtaskDueDate || a.dueDate || a.milestoneDueDate || a.projectDueDate;
 
-    const milestoneB = b.projectMilestone && milestonesById[b.projectMilestone.id];
-    const projectB = b.project && projectsById[b.project.id];
-    const dueDatesB = [milestoneB?.targetDate, projectB?.targetDate, b.dueDate, b.subtaskDueDate];
+    const dueDatesB = [b.subtaskDueDate, b.dueDate, b.milestoneDueDate, b.projectDueDate];
     dueDatesB.sort((a, b) => a === null ? 1 : b === null ? -1 : new Date(a) - new Date(b));
-    const bDueDate = dueDatesB[0];
+    const bDueDate = b.subtaskDueDate || b.dueDate || b.milestoneDueDate || b.projectDueDate;
 
 
     if (aDueDate === null && bDueDate === null) return 0;

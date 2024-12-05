@@ -124,6 +124,21 @@ const getIssuesForOrganization = async (organization, setData) => {
     remainingIssues = json.data.issues.pageInfo.hasNextPage;
   }
   setData(prev => {
+    const projectsById = {};
+    const milestonesById = {};
+    for (const project of Object.values(prev[organization.name].projects)) {
+      projectsById[project.id] = project;
+      for (const milestone of project.milestones) {
+        milestonesById[milestone.id] = milestone;
+      }
+    }
+    for (const issue of Object.values(issues)) {
+      let project; let milestone;
+      if (issue.project?.id) project = projectsById[issue.project.id];
+      if (issue.projectMilestone?.id) milestone = milestonesById[issue.projectMilestone.id];
+      issue.milestoneDueDate = milestone && milestone.targetDate ? milestone.targetDate : null;
+      issue.projectDueDate = project && project.targetDate ? project.targetDate : null;
+    }
     const currentOrgState = prev[organization.name];
     currentOrgState.issuesLoading = false;
     currentOrgState.issues = issues;
