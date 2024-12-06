@@ -48,7 +48,7 @@ const Team = props => {
         subtaskDueDate = fromSubtasks;
       }
     }
-    return subtaskDueDate;
+    return subtaskDueDate === task.dueDate ? null : subtaskDueDate;
   };
   for (const task of Object.values(issuesById)) {
     task.subtaskDueDate = getSubtaskDueDate(task);

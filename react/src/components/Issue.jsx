@@ -38,7 +38,8 @@ const Issue = props => {
   
   const dueDateToUseString = issue.subtaskDueDate || issue.dueDate || issue.milestoneDueDate || issue.projectDueDate;
   const dueDateToUse = dueDateToUseString ? new Date(dueDateToUseString) : null;
-  const isSubtaskDueDate = subtaskDueDateObj === dueDateToUse;
+
+  const isSubtaskDueDate = subtaskDueDateObj && subtaskDueDateObj.getTime() === dueDateToUse.getTime();
 
   const now = new Date();
   now.setHours(0, 0, 0, 0);
