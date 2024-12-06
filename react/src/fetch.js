@@ -136,8 +136,8 @@ const getIssuesForOrganization = async (organization, setData) => {
       let project; let milestone;
       if (issue.project?.id) project = projectsById[issue.project.id];
       if (issue.projectMilestone?.id) milestone = milestonesById[issue.projectMilestone.id];
-      issue.milestoneDueDate = milestone && milestone.targetDate ? milestone.targetDate : null;
-      issue.projectDueDate = project && project.targetDate ? project.targetDate : null;
+      issue.milestoneDueDate = (milestone && milestone.targetDate) ? milestone.targetDate : null;
+      issue.projectDueDate = (project && project.targetDate) ? project.targetDate : null;
     }
     const currentOrgState = prev[organization.name];
     currentOrgState.issuesLoading = false;
