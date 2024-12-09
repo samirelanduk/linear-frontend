@@ -12,7 +12,7 @@ const DuePage = () => {
 
   const loading = Object.values(data).some(organization => organization.issuesLoading);
 
-  const issues = [];
+  let issues = [];
 
   for (const organization of Object.values(data)) {
     for (const issue of Object.values(organization.issues)) {
@@ -24,8 +24,19 @@ const DuePage = () => {
         annotatedIssue.dueDate = annotatedIssue.projectDueDate;
       }
       annotatedIssue.organization = organization;
-      if (annotatedIssue.dueDate && annotatedIssue.assignee?.isMe && states.includes(annotatedIssue.state.type)) {
-        issues.push(annotatedIssue);
+      issues.push(annotatedIssue);
+    }
+  }
+
+  // Get parent task due dates
+  for (const issue of issues) {
+    if (!issue.dueDate && issue.parent) {
+      let parentWithDueDate = issues.find(i => i.id === issue.parent.id);
+      while (parentWithDueDate && !parentWithDueDate.dueDate) {
+        parentWithDueDate = issues.find(i => i.id === parentWithDueDate.parent.id);
+      }
+      if (parentWithDueDate && parentWithDueDate.dueDate && !parentWithDueDate.assignee?.isMe) {
+        issue.dueDate = parentWithDueDate.dueDate;
       }
     }
   }
@@ -35,7 +46,13 @@ const DuePage = () => {
     issuesById[issue.id] = issue;
   }
 
+  issues = issues.filter(issue => issue.assignee?.isMe && issue.dueDate && states.includes(issue.state.type));
+
   const parentTitles = (issues, issue) => {
+    if (issue.title === "Verify final changes locally") {
+      console.log(issue);
+      console.log(issues);
+    }
     const titles = [];
     let parent = issue.parent;
     while (parent) {
