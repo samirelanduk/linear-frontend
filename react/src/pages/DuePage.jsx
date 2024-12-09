@@ -30,6 +30,23 @@ const DuePage = () => {
     }
   }
 
+  const issuesById = {};
+  for (const issue of issues) {
+    issuesById[issue.id] = issue;
+  }
+
+  const parentTitles = (issues, issue) => {
+    const titles = [];
+    let parent = issue.parent;
+    while (parent) {
+      const parentIssue = issues[parent.id];
+      if (!parentIssue) break;
+      titles.unshift(parentIssue.title);
+      parent = parentIssue.parent;
+    }
+    return titles;
+  };
+
   issues.sort((a, b) => a.dueDate.localeCompare(b.dueDate));
   
   const dates = {};
@@ -56,18 +73,23 @@ const DuePage = () => {
             <div className="text-2xl font-medium border-b-3 border-slate-500 pb-1">{formatDate(date)}</div>
             <div className="flex flex-col mt-2">
               {issues.map(issue => (
-                <div key={issue.id} className="flex gap-2 items-center border-l-4 pl-2 py-1" style={{borderColor: issue.organization.color}}>
-                  <StateIndicator issue={issue} />
-                  <a
-                    className="-ml-0.5 text-slate-200"
-                    href={`https://linear.app/${issue.organization.urlKey}/issue/${issue.identifier}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {issue.title}
-                  </a>
-                  {issue.project && <ProjectLink issue={issue} organizationKey={issue.organization.urlKey} />}
-                  {issue.labels.length > 0 && <Labels issue={issue} />}
+                <div key={issue.id} className="border-l-4 pl-2 py-1" style={{borderColor: issue.organization.color}}>
+                  {parentTitles(issuesById, issue).length > 0 && (
+                    <div className="text-2xs text-slate-400 ml-5 -mb-1.5 -mt-1">{parentTitles(issuesById, issue).join(" / ")}</div>
+                  )}
+                  <div className="flex gap-2 items-center">
+                    <StateIndicator issue={issue} />
+                    <a
+                      className="-ml-0.5 text-slate-200"
+                      href={`https://linear.app/${issue.organization.urlKey}/issue/${issue.identifier}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {issue.title}
+                    </a>
+                    {issue.project && <ProjectLink issue={issue} organizationKey={issue.organization.urlKey} />}
+                    {issue.labels.length > 0 && <Labels issue={issue} />}
+                  </div>
                 </div>
               ))}
             </div>
