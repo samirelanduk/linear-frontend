@@ -33,7 +33,7 @@ const DuePage = () => {
     if (!issue.dueDate && issue.parent) {
       let parentWithDueDate = issues.find(i => i.id === issue.parent.id);
       while (parentWithDueDate && !parentWithDueDate.dueDate) {
-        parentWithDueDate = issues.find(i => i.id === parentWithDueDate.parent.id);
+        parentWithDueDate = issues.find(i => i.id === parentWithDueDate.parent?.id);
       }
       if (parentWithDueDate && parentWithDueDate.dueDate && !parentWithDueDate.assignee?.isMe) {
         issue.dueDate = parentWithDueDate.dueDate;
@@ -92,7 +92,7 @@ const DuePage = () => {
               {issues.map(issue => (
                 <div key={issue.id} className="border-l-4 pl-2 py-1" style={{borderColor: issue.organization.color}}>
                   {parentTitles(issuesById, issue).length > 0 && (
-                    <div className="text-2xs text-slate-400 ml-5 -mb-1.5 -mt-1">{parentTitles(issuesById, issue).join(" / ")}</div>
+                    <div className="text-2xs text-slate-400 ml-5 pl-0.5 -mb-1.5 -mt-1">{parentTitles(issuesById, issue).join(" / ")}</div>
                   )}
                   <div className="flex gap-2 items-center">
                     <StateIndicator issue={issue} />
