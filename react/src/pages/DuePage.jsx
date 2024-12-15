@@ -95,7 +95,7 @@ const DuePage = () => {
                     <div className="text-2xs text-slate-400 ml-5 pl-0.5 -mb-1.5 -mt-1">{parentTitles(issuesById, issue).join(" / ")}</div>
                   )}
                   <div className="flex gap-2 items-center">
-                    <StateIndicator issue={issue} />
+                    <StateIndicator issue={issue} stateIds={Object.values(issue.organization.teams).find(team => team.key === issue.identifier.split("-")[0])?.stateIds} />
                     <a
                       className="-ml-0.5 text-slate-200"
                       href={`https://linear.app/${issue.organization.urlKey}/issue/${issue.identifier}`}

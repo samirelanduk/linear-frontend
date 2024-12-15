@@ -9,7 +9,7 @@ import Labels from "./Labels";
 
 const Issue = props => {
 
-  const { issue, organization, states } = props;
+  const { issue, organization, states, stateIds } = props;
 
   const [tasksCollapsed, setTasksCollapsed] = useState(null);
 
@@ -54,7 +54,7 @@ const Issue = props => {
   return (
     <div className={`${props.className || ""}`}>
       <div className={`py-px flex items-center gap-1.5 ${isMe ? "" : "opacity-20"}`}>
-        <StateIndicator issue={issue} />
+        <StateIndicator issue={issue} stateIds={stateIds} />
         <a
           href={`https://linear.app/${organization.urlKey}/issue/${issue.identifier}`}
           target="_blank"
@@ -79,7 +79,7 @@ const Issue = props => {
       {subtasks.length > 0 && !collapsed && (
         <div className="flex flex-col gap-2 mt-2">
           {subtasks.map(child => (
-            <Issue key={child.id} issue={child} organization={organization} states={states} className="ml-6" />
+            <Issue key={child.id} issue={child} organization={organization} states={states} stateIds={stateIds} className="ml-6" />
           ))}
         </div>
       )}
@@ -92,6 +92,7 @@ Issue.propTypes = {
   issue: PropTypes.object.isRequired,
   organization: PropTypes.object.isRequired,
   states: PropTypes.array.isRequired,
+  stateIds: PropTypes.object.isRequired,
 };
 
 export default Issue;

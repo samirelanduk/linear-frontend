@@ -1,6 +1,6 @@
 import { TEAMS, PROJECTS, ISSUES } from "./queries";
 
-const fetchLinear = async (organization, query, variables) => {
+export const fetchLinear = async (organization, query, variables) => {
   /**
    * Fetches data from the Linear API using the provided query and variables.
    */
@@ -72,7 +72,12 @@ const getTeamsForOrganization = async (organization, setData) => {
       if (team.issues.nodes.length === 0) return acc;
       delete team.members
       team.issueCount = team.issues.nodes.length;
+      team.stateIds = team.states.nodes.reduce((acc, state) => {
+        acc[state.type] = state.id;
+        return acc;
+      }, {});
       delete team.issues;
+      delete team.states;
       acc[team.id] = team;
       return acc;
     }, {});
@@ -138,6 +143,7 @@ const getIssuesForOrganization = async (organization, setData) => {
       if (issue.projectMilestone?.id) milestone = milestonesById[issue.projectMilestone.id];
       issue.milestoneDueDate = (milestone && milestone.targetDate) ? milestone.targetDate : null;
       issue.projectDueDate = (project && project.targetDate) ? project.targetDate : null;
+      issue.organization = organization;
     }
     const currentOrgState = prev[organization.name];
     currentOrgState.issuesLoading = false;

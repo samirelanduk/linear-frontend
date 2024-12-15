@@ -2,6 +2,7 @@ export const TEAMS = `{
   teams(first: 50) {
     nodes {
       id name color key
+      states { nodes { id name type } }
       members(filter: { isMe: { eq: true } }) { nodes { id } }
       issues(filter: {
         state: {type: {in: ["started", "unstarted"]}}
@@ -49,5 +50,14 @@ export const ISSUES = `query issues($after: String) {
       projectMilestone { id }
       labels { nodes { id name color } }
     }
+  }
+}`;
+
+export const UPDATE_ISSUE_STATE = `mutation updateState($issueId: String!, $stateId: String!) {
+  issueUpdate(
+    input: { stateId: $stateId },
+    id: $issueId
+  ) {
+    issue { state { type } }
   }
 }`;
