@@ -15,7 +15,7 @@ const Team = props => {
       issue.children = Object.values(issuesById).filter(child => child.parent?.id === issue.id);
     }
     for (const issue of Object.values(issuesById)) {
-      if (issue.parent !== null) issue.parent = issuesById[issue.parent.id];
+      if (issue.parent !== null) issue.parent = issuesById[issue.parent?.id];
     }
     return issuesById;
   }
