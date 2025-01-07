@@ -13,7 +13,6 @@ const Nav = () => {
     <nav className="h-20 text-white px-10 flex justify-between items-center fixed bg-slate-700 left-0 right-0 z-50">
       <div className="flex h-full gap-2 items-center sm:gap-3 md:gap-4">
         <Link to="/" className={path === "/" ? navLinkActiveClass : navLinkInactiveClass}>Teams</Link>
-        <Link to="/projects" className={path === "/projects" ? navLinkActiveClass : navLinkInactiveClass}>Projects</Link>
         <Link to="/due" className={path === "/due" ? navLinkActiveClass : navLinkInactiveClass}>Due</Link>
       </div>
       <StatesToggle />
