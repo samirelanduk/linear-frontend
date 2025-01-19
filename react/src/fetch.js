@@ -122,6 +122,7 @@ const getIssuesForOrganization = async (organization, setData) => {
   while (remainingIssues) {
     const json = await fetchLinear(organization, ISSUES, {after});
     for (const issue of json.data.issues.nodes) {
+      if (issue.state.name === "Committed") continue;
       issue.labels = issue.labels.nodes;
       issues[issue.id] = issue;
     }
